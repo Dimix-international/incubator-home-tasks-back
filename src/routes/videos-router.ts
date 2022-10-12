@@ -24,7 +24,7 @@ const checkErrorsVideo = (data: UpdateVideoType): ErrorType[] => {
         })
     }
 
-    if (!author || typeof title !== 'string' || !author.trim() || author.length > MAX_LENGTH_TITLE) {
+    if (!author || typeof author !== 'string' || !author.trim() || author.length > MAX_LENGTH_TITLE) {
         errors.push({
             message: "Incorrect author",
             field: "author"
