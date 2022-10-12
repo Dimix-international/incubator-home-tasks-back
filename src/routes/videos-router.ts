@@ -2,6 +2,8 @@ import {Request, Response, Router} from "express";
 import {ErrorType, RequestVideoType, VideoDataType, Data, Resolutions_Video, UpdateVideoType} from "../data/data";
 import {isInt} from "../helpers/helpers";
 import {MAX_LENGTH_AUTHOR, MAX_LENGTH_TITLE, MAX_VIDEO_AGE, MIN_VIDEO_AGE} from "../constants/videos";
+import {dateTimeFormat} from "../constants/general/general";
+
 
 export const videosRouter = Router({});
 const { videosData } = Data;
@@ -13,6 +15,7 @@ const checkErrorsVideo = (data: UpdateVideoType): ErrorType[] => {
         availableResolutions = null,
         canBeDownloaded,
         minAgeRestriction = null,
+        publicationDate
     } = data || {};
 
     const errors: ErrorType[] = [];
@@ -71,6 +74,13 @@ const checkErrorsVideo = (data: UpdateVideoType): ErrorType[] => {
                 field: "minAgeRestriction"
             })
         }
+    }
+
+    if  (publicationDate && !dateTimeFormat.test(publicationDate)) {
+        errors.push({
+            message: "Incorrect publicationDate",
+            field: "publicationDate"
+        })
     }
 
     return errors;
@@ -162,6 +172,7 @@ videosRouter.put('/:id', (req:Request, res:Response) => {
             const {
                 title,
                 author,
+                publicationDate,
                 availableResolutions = null,
                 canBeDownloaded = false,
                 minAgeRestriction = null,
@@ -174,7 +185,7 @@ videosRouter.put('/:id', (req:Request, res:Response) => {
                     id,
                     createdAt,
                     title,
-                    publicationDate: new Date().toISOString(),
+                    publicationDate,
                     author,
                     availableResolutions,
                     minAgeRestriction,
