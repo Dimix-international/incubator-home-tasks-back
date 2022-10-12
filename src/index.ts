@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from "body-parser";
 import { videosRouter } from "./routes/videos-router";
-import {allDataRouter} from "./routes/all_data-router";
+import {testingDataRouter} from "./routes/all_data-router";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -10,7 +10,7 @@ const parserMiddleware = bodyParser({});
 
 app.use(parserMiddleware);
 
-app.use('/all-data', allDataRouter);
+app.use('/testing', testingDataRouter);
 app.use('/videos', videosRouter);
 
 app.listen(port, () => {

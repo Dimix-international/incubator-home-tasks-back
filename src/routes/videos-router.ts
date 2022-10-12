@@ -110,6 +110,9 @@ videosRouter.post('/', (req:Request, res:Response) => {
 
     if (!errors.length) {
 
+        const date = new Date();
+        const nextDate = date.setDate(date.getDate() + 1);
+
         const id = Math.random();
         const createdVideo: VideoDataType = {
             id,
@@ -117,7 +120,7 @@ videosRouter.post('/', (req:Request, res:Response) => {
             createdAt: new Date().toISOString(),
             canBeDownloaded: true,
             minAgeRestriction: null,
-            publicationDate: new Date().toISOString(),
+            publicationDate: new Date(nextDate).toISOString(),
             author,
             availableResolutions: getUnicResolutionOrNull(availableResolutions)
         }
