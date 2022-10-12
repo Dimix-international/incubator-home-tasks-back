@@ -38,6 +38,18 @@ const checkErrorsVideo = (data: UpdateVideoType): ErrorType[] => {
         })
     }
 
+    if ( availableResolutions !== null && Array.isArray(availableResolutions)) {
+
+        const res = availableResolutions.every(res => Object.keys(Resolutions_Video).includes(res));
+
+        if (!res) {
+            errors.push({
+                message: "Incorrect availableResolutions",
+                field: "availableResolutions"
+            })
+        }
+    }
+
     if (canBeDownloaded && typeof canBeDownloaded !== 'boolean') {
         errors.push({
             message: "Incorrect canBeDownloaded",
