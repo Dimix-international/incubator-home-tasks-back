@@ -6,7 +6,7 @@ import {dateTimeFormat} from "../constants/general/general";
 
 
 export const videosRouter = Router({});
-const { videosData } = Data;
+
 
 const checkErrorsVideo = (data: UpdateVideoType): ErrorType[] => {
     const {
@@ -100,6 +100,7 @@ videosRouter.get('/', (req:Request, res:Response) => {
 });
 
 videosRouter.get('/:id', (req:Request, res:Response) => {
+    const { videosData } = Data;
     const { id } = req.params;
 
     const searchVideo = videosData.find(video => video.id === +id);
@@ -112,6 +113,7 @@ videosRouter.get('/:id', (req:Request, res:Response) => {
 });
 
 videosRouter.delete('/:id', (req:Request, res:Response) => {
+    const { videosData } = Data;
     const { id } = req.params;
 
     const searchIndex = videosData.findIndex(video => video.id === +id);
@@ -125,7 +127,6 @@ videosRouter.delete('/:id', (req:Request, res:Response) => {
 });
 
 videosRouter.post('/', (req:Request, res:Response) => {
-
     const { title, author, availableResolutions } = req.body as RequestVideoType || {};
 
     const errors: ErrorType[] = checkErrorsVideo(req.body);
@@ -147,7 +148,7 @@ videosRouter.post('/', (req:Request, res:Response) => {
             availableResolutions: getUnicResolutionOrNull(availableResolutions)
         }
 
-        videosData.push(createdVideo);
+        Data.videosData.push(createdVideo);
         res.status(201).send(createdVideo);
 
     } else {
@@ -159,6 +160,7 @@ videosRouter.post('/', (req:Request, res:Response) => {
 });
 
 videosRouter.put('/:id', (req:Request, res:Response) => {
+    const { videosData } = Data;
     const { id } = req.params;
 
     const updatedVideo = videosData.find(video => video.id === +id);
@@ -172,27 +174,28 @@ videosRouter.put('/:id', (req:Request, res:Response) => {
             const {
                 title,
                 author,
-                publicationDate,
+                publicationDate: publicationDateReqBody,
                 availableResolutions: availableResolutionsReqBody,
                 canBeDownloaded: canBeDownloadedReqBody,
                 minAgeRestriction: minAgeRestrictionReqBody,
             } = req.body as UpdateVideoType || {};
 
-            const {id, createdAt, availableResolutions, minAgeRestriction, canBeDownloaded } = updatedVideo;
+            console.log('minAgeRestrictionReqBody', minAgeRestrictionReqBody);
 
-            Data.videosData = videosData.map(video => video.id === updatedVideo.id
-                ? {
-                    id,
-                    createdAt,
-                    title,
-                    publicationDate,
-                    author,
-                    availableResolutions: availableResolutionsReqBody || availableResolutions,
-                    minAgeRestriction: minAgeRestrictionReqBody || minAgeRestriction,
-                    canBeDownloaded: canBeDownloadedReqBody || canBeDownloaded
-                }
-                : video
-            )
+            Data.videosData = videosData.map(video => {
+                console.log('video', video);
+                return video.id === updatedVideo.id
+                    ? {
+                        ...video,
+                        title,
+                        author,
+                        publicationDate: publicationDateReqBody || video.publicationDate,
+                        availableResolutions: availableResolutionsReqBody || video.availableResolutions,
+                        minAgeRestriction: minAgeRestrictionReqBody || video.minAgeRestriction,
+                        canBeDownloaded: canBeDownloadedReqBody || video.canBeDownloaded
+                    }
+                    : video
+            })
             res.send(204);
         } else {
             res.status(400).send({
