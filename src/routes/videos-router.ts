@@ -1,7 +1,7 @@
 import {Request, Response, Router} from "express";
 import {ErrorType, RequestVideoType, VideoDataType, Data, Resolutions_Video, UpdateVideoType} from "../data/data";
 import {isInt} from "../helpers/helpers";
-import {MAX_LENGTH_TITLE, MAX_VIDEO_AGE, MIN_VIDEO_AGE} from "../constants/videos";
+import {MAX_LENGTH_AUTHOR, MAX_LENGTH_TITLE, MAX_VIDEO_AGE, MIN_VIDEO_AGE} from "../constants/videos";
 
 export const videosRouter = Router({});
 const { videosData } = Data;
@@ -24,7 +24,7 @@ const checkErrorsVideo = (data: UpdateVideoType): ErrorType[] => {
         })
     }
 
-    if (!author || typeof author !== 'string' || !author.trim() || author.length > MAX_LENGTH_TITLE) {
+    if (!author || typeof author !== 'string' || !author.trim() || author.length > MAX_LENGTH_AUTHOR) {
         errors.push({
             message: "Incorrect author",
             field: "author"
@@ -155,7 +155,7 @@ videosRouter.put('/:id', (req:Request, res:Response) => {
                 minAgeRestriction = null,
             } = req.body as UpdateVideoType;
 
-            const {id, createdAt} = updatedVideo;
+            const {id, createdAt } = updatedVideo;
 
             Data.videosData = videosData.map(video => video.id === updatedVideo.id
                 ? {
