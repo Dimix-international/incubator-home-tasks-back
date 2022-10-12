@@ -173,12 +173,12 @@ videosRouter.put('/:id', (req:Request, res:Response) => {
                 title,
                 author,
                 publicationDate,
-                availableResolutions = null,
-                canBeDownloaded = false,
-                minAgeRestriction = null,
-            } = req.body as UpdateVideoType;
+                availableResolutions: availableResolutionsReqBody,
+                canBeDownloaded: canBeDownloadedReqBody,
+                minAgeRestriction: minAgeRestrictionReqBody,
+            } = req.body as UpdateVideoType || {};
 
-            const {id, createdAt } = updatedVideo;
+            const {id, createdAt, availableResolutions, minAgeRestriction, canBeDownloaded } = updatedVideo;
 
             Data.videosData = videosData.map(video => video.id === updatedVideo.id
                 ? {
@@ -187,9 +187,9 @@ videosRouter.put('/:id', (req:Request, res:Response) => {
                     title,
                     publicationDate,
                     author,
-                    availableResolutions,
-                    minAgeRestriction,
-                    canBeDownloaded
+                    availableResolutions: availableResolutionsReqBody || availableResolutions,
+                    minAgeRestriction: minAgeRestrictionReqBody || minAgeRestriction,
+                    canBeDownloaded: canBeDownloadedReqBody || canBeDownloaded
                 }
                 : video
             )
