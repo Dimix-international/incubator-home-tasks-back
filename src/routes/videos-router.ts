@@ -1,5 +1,13 @@
 import {Request, Response, Router} from "express";
-import {ErrorType, RequestVideoType, VideoDataType, Data, Resolutions_Video, UpdateVideoType} from "../data/data";
+import {
+    ErrorType,
+    RequestVideoType,
+    VideoDataType,
+    Data,
+    Resolutions_Video,
+    UpdateVideoType,
+    HTTP_STATUSES
+} from "../data/data";
 import {isInt} from "../helpers/helpers";
 import {MAX_LENGTH_AUTHOR, MAX_LENGTH_TITLE, MAX_VIDEO_AGE, MIN_VIDEO_AGE} from "../constants/videos";
 import {dateTimeFormat} from "../constants/general/general";
@@ -96,7 +104,7 @@ const getUnicResolutionOrNull = (availableResolutions:  Resolutions_Video[] | nu
 
 
 videosRouter.get('/', (req:Request, res:Response) => {
-    res.status(200).send(Data.videosData)
+    res.status(HTTP_STATUSES.OK_200).send(Data.videosData)
 });
 
 videosRouter.get('/:id', (req:Request, res:Response) => {
@@ -106,9 +114,9 @@ videosRouter.get('/:id', (req:Request, res:Response) => {
     const searchVideo = videosData.find(video => video.id === +id);
 
     if (searchVideo) {
-        res.status(200).send(searchVideo)
+        res.status(HTTP_STATUSES.OK_200).send(searchVideo)
     } else {
-        res.send(404);
+        res.send(HTTP_STATUSES.NOT_FOUND_404);
     }
 });
 
@@ -120,9 +128,9 @@ videosRouter.delete('/:id', (req:Request, res:Response) => {
 
     if (searchIndex !== -1) {
         videosData.splice(searchIndex, 1);
-        res.send(204);
+        res.send(HTTP_STATUSES.NO_CONTENT_204);
     } else {
-        res.send(404);
+        res.send(HTTP_STATUSES.NOT_FOUND_404);
     }
 });
 
@@ -149,10 +157,10 @@ videosRouter.post('/', (req:Request, res:Response) => {
         }
 
         Data.videosData.push(createdVideo);
-        res.status(201).send(createdVideo);
+        res.status(HTTP_STATUSES.CREATED_201).send(createdVideo);
 
     } else {
-        res.status(400).send({
+        res.status(HTTP_STATUSES.BAD_REQUEST_400).send({
             errorsMessages: errors
         });
     }
@@ -180,11 +188,7 @@ videosRouter.put('/:id', (req:Request, res:Response) => {
                 minAgeRestriction: minAgeRestrictionReqBody,
             } = req.body as UpdateVideoType || {};
 
-            console.log('minAgeRestrictionReqBody', minAgeRestrictionReqBody);
-
-            Data.videosData = videosData.map(video => {
-                console.log('video', video);
-                return video.id === updatedVideo.id
+            Data.videosData = videosData.map(video => video.id === updatedVideo.id
                     ? {
                         ...video,
                         title,
@@ -195,15 +199,15 @@ videosRouter.put('/:id', (req:Request, res:Response) => {
                         canBeDownloaded: canBeDownloadedReqBody || video.canBeDownloaded
                     }
                     : video
-            })
-            res.send(204);
+            )
+            res.send(HTTP_STATUSES.NO_CONTENT_204);
         } else {
-            res.status(400).send({
+            res.status(HTTP_STATUSES.BAD_REQUEST_400).send({
                 errorsMessages: errors
             });
         }
 
     } else {
-        res.send(404);
+        res.send(HTTP_STATUSES.NOT_FOUND_404);
     }
 })

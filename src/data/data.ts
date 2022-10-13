@@ -8,6 +8,14 @@ export enum Resolutions_Video {
     P1440 = 'P1440',
     P2160 = 'P2160',
 }
+export const enum HTTP_STATUSES {
+    OK_200 = 200,
+    CREATED_201 = 201,
+    NO_CONTENT_204 = 204,
+    BAD_REQUEST_400 = 400,
+    NOT_FOUND_404 = 404
+}
+
 
 export type RequestVideoType = {
     title: string;
