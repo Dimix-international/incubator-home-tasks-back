@@ -31,12 +31,6 @@ export type VideoDataType = RequestVideoType & {
     publicationDate: string,
 }
 
-export type UpdateVideoType = Omit<VideoDataType, 'id' | 'createdAt'>
-
-export type ErrorType = {
-    message: string,
-    field: string,
-}
 
 type DataType = {
     videosData: VideoDataType[]

@@ -1,22 +1,32 @@
 import {Request, Response, Router} from "express";
 import {
-    ErrorType,
-    RequestVideoType,
-    VideoDataType,
     Data,
     Resolutions_Video,
-    UpdateVideoType,
     HTTP_STATUSES
 } from "../data/data";
 import {isInt} from "../helpers/helpers";
 import {MAX_LENGTH_AUTHOR, MAX_LENGTH_TITLE, MAX_VIDEO_AGE, MIN_VIDEO_AGE} from "../constants/videos";
 import {dateTimeFormat} from "../constants/general/general";
+import {RequestWithBody, RequestWithParams, RequestWithParamsBody} from "../types/types";
+import {VideoURIParamsModel} from "../models/VideoURIParamsModel";
+import {VideoUpdateModel} from "../models/VideoUpdateModel";
+import {VideoCreateModel} from "../models/VideoCreateModel";
+import {VideoViewModel} from "../models/VideoViewModel";
+import {ErrorType, VideoViewErrorType} from "../models/VideoViewErrorType";
 
 
 export const videosRouter = Router({});
 
+type CheckErrorType = {
+    title: string;
+    author: string;
+    availableResolutions: Resolutions_Video[] | null,
+    canBeDownloaded?: boolean,
+    minAgeRestriction?: number | null,
+    publicationDate?: string,
+}
 
-const checkErrorsVideo = (data: UpdateVideoType): ErrorType[] => {
+const checkErrorsVideo = (data: CheckErrorType): ErrorType[] => {
     const {
         title,
         author,
@@ -103,11 +113,11 @@ const getUnicResolutionOrNull = (availableResolutions:  Resolutions_Video[] | nu
 }
 
 
-videosRouter.get('/', (req:Request, res:Response) => {
+videosRouter.get('/', (req:Request, res:Response<VideoViewModel[]>) => {
     res.status(HTTP_STATUSES.OK_200).send(Data.videosData)
 });
 
-videosRouter.get('/:id', (req:Request, res:Response) => {
+videosRouter.get('/:id', (req:Request<VideoURIParamsModel>, res:Response<VideoViewModel>) => {
     const { videosData } = Data;
     const { id } = req.params;
 
@@ -116,11 +126,11 @@ videosRouter.get('/:id', (req:Request, res:Response) => {
     if (searchVideo) {
         res.status(HTTP_STATUSES.OK_200).send(searchVideo)
     } else {
-        res.send(HTTP_STATUSES.NOT_FOUND_404);
+        res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
     }
 });
 
-videosRouter.delete('/:id', (req:Request, res:Response) => {
+videosRouter.delete('/:id', (req:RequestWithParams<VideoURIParamsModel>, res:Response) => {
     const { videosData } = Data;
     const { id } = req.params;
 
@@ -134,8 +144,8 @@ videosRouter.delete('/:id', (req:Request, res:Response) => {
     }
 });
 
-videosRouter.post('/', (req:Request, res:Response) => {
-    const { title, author, availableResolutions } = req.body as RequestVideoType || {};
+videosRouter.post('/', (req:RequestWithBody<VideoCreateModel>, res:Response<VideoViewModel | VideoViewErrorType>) => {
+    const { title, author, availableResolutions } = req.body;
 
     const errors: ErrorType[] = checkErrorsVideo(req.body);
 
@@ -145,7 +155,7 @@ videosRouter.post('/', (req:Request, res:Response) => {
         const nextDate = date.setDate(date.getDate() + 1);
 
         const id = Math.random();
-        const createdVideo: VideoDataType = {
+        const createdVideo: VideoViewModel = {
             id,
             title,
             createdAt: new Date().toISOString(),
@@ -167,7 +177,7 @@ videosRouter.post('/', (req:Request, res:Response) => {
 
 });
 
-videosRouter.put('/:id', (req:Request, res:Response) => {
+videosRouter.put('/:id', (req:RequestWithParamsBody<VideoURIParamsModel, VideoUpdateModel>, res:Response) => {
     const { videosData } = Data;
     const { id } = req.params;
 
@@ -186,7 +196,7 @@ videosRouter.put('/:id', (req:Request, res:Response) => {
                 availableResolutions: availableResolutionsReqBody,
                 canBeDownloaded: canBeDownloadedReqBody,
                 minAgeRestriction: minAgeRestrictionReqBody,
-            } = req.body as UpdateVideoType || {};
+            } = req.body;
 
             Data.videosData = videosData.map(video => video.id === updatedVideo.id
                     ? {
@@ -200,7 +210,7 @@ videosRouter.put('/:id', (req:Request, res:Response) => {
                     }
                     : video
             )
-            res.send(HTTP_STATUSES.NO_CONTENT_204);
+            res.sendStatus(HTTP_STATUSES.NO_CONTENT_204);
         } else {
             res.status(HTTP_STATUSES.BAD_REQUEST_400).send({
                 errorsMessages: errors
@@ -208,6 +218,6 @@ videosRouter.put('/:id', (req:Request, res:Response) => {
         }
 
     } else {
-        res.send(HTTP_STATUSES.NOT_FOUND_404);
+        res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
     }
 })
