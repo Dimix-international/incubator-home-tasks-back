@@ -1,4 +1,4 @@
-import {Data, HTTP_STATUSES, Resolutions_Video} from "../data/data";
+import {Data, Resolutions_Video} from "../data/data";
 import {VideoCreateModel} from "../models/VideoCreateModel";
 import {ErrorType, VideoViewErrorType} from "../models/VideoViewErrorType";
 import {MAX_LENGTH_AUTHOR, MAX_LENGTH_TITLE, MAX_VIDEO_AGE, MIN_VIDEO_AGE} from "../constants/videos";
@@ -16,7 +16,6 @@ type CheckErrorType = {
     minAgeRestriction?: number | null,
     publicationDate?: string,
 }
-
 
 const checkErrorsVideo = (data: CheckErrorType): ErrorType[] => {
     const {
@@ -103,7 +102,6 @@ const getUnicResolutionOrNull = (availableResolutions:  Resolutions_Video[] | nu
 
     return  result?.length ? result : null
 }
-
 
 export const videosRepository = {
     getVideos () {

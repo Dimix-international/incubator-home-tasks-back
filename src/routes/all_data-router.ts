@@ -1,10 +1,10 @@
 import {Request, Response, Router} from "express";
-import {Data} from "../data/data";
+import {testingDataRepository} from "../repositories/testing-data-repository";
 
 
 export const testingDataRouter = Router({});
 
 testingDataRouter.delete('/all-data', (req:Request, res:Response) => {
-    Data.videosData = [];
+    testingDataRepository.deleteAllVideosData();
     res.send(204);
 })
