@@ -1,4 +1,5 @@
-import {Resolutions_Video} from "../../data/data";
+import {Resolutions_Video} from "../../data/types/videos-types";
+
 
 export type VideoViewModel = {
     title: string;
