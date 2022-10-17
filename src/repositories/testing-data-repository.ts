@@ -2,7 +2,9 @@ import {Data} from "../data/data";
 
 
 export const testingDataRepository = {
-    deleteAllVideosData () {
+    deleteAllData () {
         Data.videosData = [];
+        Data.blogsData = [];
+        Data.postsData = [];
     }
 }

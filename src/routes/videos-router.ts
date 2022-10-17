@@ -1,11 +1,11 @@
 import {Request, Response, Router} from "express";
 import {HTTP_STATUSES} from "../data/data";
 import {RequestWithBody, RequestWithParams, RequestWithParamsBody} from "../types/types";
-import {VideoURIParamsModel} from "../models/VideoURIParamsModel";
-import {VideoUpdateModel} from "../models/VideoUpdateModel";
-import {VideoCreateModel} from "../models/VideoCreateModel";
-import {VideoViewModel} from "../models/VideoViewModel";
-import {VideoViewErrorType} from "../models/VideoViewErrorType";
+import {VideoURIParamsModel} from "../models/videos/VideoURIParamsModel";
+import {VideoUpdateModel} from "../models/videos/VideoUpdateModel";
+import {VideoCreateModel} from "../models/videos/VideoCreateModel";
+import {VideoViewModel} from "../models/videos/VideoViewModel";
+import {VideoViewErrorType} from "../models/videos/VideoViewErrorType";
 import {videosRepository} from "../repositories/videos-repository";
 
 

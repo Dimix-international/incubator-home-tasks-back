@@ -1,11 +1,12 @@
-import {Data, Resolutions_Video} from "../data/data";
-import {VideoCreateModel} from "../models/VideoCreateModel";
-import {ErrorType, VideoViewErrorType} from "../models/VideoViewErrorType";
+import {Data} from "../data/data";
+import {VideoCreateModel} from "../models/videos/VideoCreateModel";
+import {ErrorType, VideoViewErrorType} from "../models/videos/VideoViewErrorType";
 import {MAX_LENGTH_AUTHOR, MAX_LENGTH_TITLE, MAX_VIDEO_AGE, MIN_VIDEO_AGE} from "../constants/videos";
 import {isInt} from "../helpers/helpers";
 import {dateTimeFormat} from "../constants/general/general";
-import {VideoViewModel} from "../models/VideoViewModel";
-import {VideoUpdateModel} from "../models/VideoUpdateModel";
+import {VideoViewModel} from "../models/videos/VideoViewModel";
+import {VideoUpdateModel} from "../models/videos/VideoUpdateModel";
+import {Resolutions_Video} from "../data/types/videos-types";
 
 
 type CheckErrorType = {

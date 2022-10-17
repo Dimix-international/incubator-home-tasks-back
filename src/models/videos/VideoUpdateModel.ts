@@ -1,4 +1,4 @@
-import {Resolutions_Video} from "../data/data";
+import {Resolutions_Video} from "../../data/data";
 
 export type VideoUpdateModel = {
     /**
