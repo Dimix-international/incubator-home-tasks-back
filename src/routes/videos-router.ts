@@ -13,6 +13,7 @@ import {VideoUpdateModel} from "../models/VideoUpdateModel";
 import {VideoCreateModel} from "../models/VideoCreateModel";
 import {VideoViewModel} from "../models/VideoViewModel";
 import {ErrorType, VideoViewErrorType} from "../models/VideoViewErrorType";
+import {videosRepository} from "../repositories/videos-repository";
 
 
 export const videosRouter = Router({});
@@ -104,24 +105,14 @@ const checkErrorsVideo = (data: CheckErrorType): ErrorType[] => {
     return errors;
 };
 
-const getUnicResolutionOrNull = (availableResolutions:  Resolutions_Video[] | null): Resolutions_Video[] | null  => {
-   const result = Array.isArray(availableResolutions)
-       ? availableResolutions.filter(res => Object.keys(Resolutions_Video).includes(res))
-       : null;
-
-   return  result?.length ? result : null
-}
-
-
 videosRouter.get('/', (req:Request, res:Response<VideoViewModel[]>) => {
-    res.status(HTTP_STATUSES.OK_200).send(Data.videosData)
+    res.status(HTTP_STATUSES.OK_200).send(videosRepository.getVideos())
 });
 
 videosRouter.get('/:id', (req:Request<VideoURIParamsModel>, res:Response<VideoViewModel>) => {
-    const { videosData } = Data;
     const { id } = req.params;
 
-    const searchVideo = videosData.find(video => video.id === +id);
+    const searchVideo = videosRepository.getVideoById(id);
 
     if (searchVideo) {
         res.status(HTTP_STATUSES.OK_200).send(searchVideo)
@@ -131,93 +122,41 @@ videosRouter.get('/:id', (req:Request<VideoURIParamsModel>, res:Response<VideoVi
 });
 
 videosRouter.delete('/:id', (req:RequestWithParams<VideoURIParamsModel>, res:Response) => {
-    const { videosData } = Data;
     const { id } = req.params;
 
-    const searchIndex = videosData.findIndex(video => video.id === +id);
+    const isDeletedVideo = videosRepository.deleteVideoById(id);
 
-    if (searchIndex !== -1) {
-        videosData.splice(searchIndex, 1);
-        res.send(HTTP_STATUSES.NO_CONTENT_204);
-    } else {
-        res.send(HTTP_STATUSES.NOT_FOUND_404);
-    }
+    res.send(isDeletedVideo
+        ? HTTP_STATUSES.NO_CONTENT_204
+        : HTTP_STATUSES.NOT_FOUND_404
+    );
 });
 
 videosRouter.post('/', (req:RequestWithBody<VideoCreateModel>, res:Response<VideoViewModel | VideoViewErrorType>) => {
-    const { title, author, availableResolutions } = req.body;
 
-    const errors: ErrorType[] = checkErrorsVideo(req.body);
+    const createdVideo = videosRepository.createVideo(req.body);
 
-    if (!errors.length) {
-
-        const date = new Date();
-        const nextDate = date.setDate(date.getDate() + 1);
-
-        const id = Math.random();
-        const createdVideo: VideoViewModel = {
-            id,
-            title,
-            createdAt: new Date().toISOString(),
-            canBeDownloaded: false,
-            minAgeRestriction: null,
-            publicationDate: new Date(nextDate).toISOString(),
-            author,
-            availableResolutions: getUnicResolutionOrNull(availableResolutions)
-        }
-
-        Data.videosData.push(createdVideo);
-        res.status(HTTP_STATUSES.CREATED_201).send(createdVideo);
-
+    if ('errorsMessages' in createdVideo) {
+        res.status(HTTP_STATUSES.BAD_REQUEST_400).send(createdVideo);
     } else {
-        res.status(HTTP_STATUSES.BAD_REQUEST_400).send({
-            errorsMessages: errors
-        });
+        res.status(HTTP_STATUSES.CREATED_201).send(createdVideo);
     }
 
 });
 
 videosRouter.put('/:id', (req:RequestWithParamsBody<VideoURIParamsModel, VideoUpdateModel>, res:Response) => {
-    const { videosData } = Data;
     const { id } = req.params;
 
-    const updatedVideo = videosData.find(video => video.id === +id);
+    const updatedVideo = videosRepository.updateVideoById(id, req.body);
 
-    if (updatedVideo) {
-
-        const errors = checkErrorsVideo(req.body);
-
-        if (!errors.length) {
-
-            const {
-                title,
-                author,
-                publicationDate: publicationDateReqBody,
-                availableResolutions: availableResolutionsReqBody,
-                canBeDownloaded: canBeDownloadedReqBody,
-                minAgeRestriction: minAgeRestrictionReqBody,
-            } = req.body;
-
-            Data.videosData = videosData.map(video => video.id === updatedVideo.id
-                    ? {
-                        ...video,
-                        title,
-                        author,
-                        publicationDate: publicationDateReqBody || video.publicationDate,
-                        availableResolutions: availableResolutionsReqBody || video.availableResolutions,
-                        minAgeRestriction: minAgeRestrictionReqBody || video.minAgeRestriction,
-                        canBeDownloaded: canBeDownloadedReqBody || video.canBeDownloaded
-                    }
-                    : video
-            )
-            res.sendStatus(HTTP_STATUSES.NO_CONTENT_204);
-        } else {
-            res.status(HTTP_STATUSES.BAD_REQUEST_400).send({
-                errorsMessages: errors
-            });
-        }
-
-    } else {
-        res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
+    if (updatedVideo && 'errorsMessages' in updatedVideo) {
+        res.status(HTTP_STATUSES.BAD_REQUEST_400).send(updatedVideo);
+        return;
     }
+
+    res.sendStatus(!updatedVideo
+        ? HTTP_STATUSES.NOT_FOUND_404
+        : HTTP_STATUSES.NO_CONTENT_204
+    );
+
 })
