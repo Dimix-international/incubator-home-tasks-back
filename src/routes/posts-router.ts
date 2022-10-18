@@ -48,7 +48,7 @@ postsRouter.delete('/:id',
     }
  )
 
-postsRouter.put('/',
+postsRouter.put('/:id',
     authMiddleware,
     PostValidatorSchema,
     inputValidatorMiddlewares,

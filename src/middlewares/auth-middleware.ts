@@ -12,9 +12,15 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
 
     try {
 
-        const token = req.headers?.authorization?.split(' ')[1];
+        if (!req.headers) {
+            res.send(HTTP_STATUSES.UNAUTHORIZED_401);
+            return;
+        }
 
-        if (!token) {
+        const token = req.headers.authorization?.split(' ')[1];
+        const formAuth = req.headers.authorization?.split(' ')[0];
+
+        if (!token || formAuth !== 'Basic') {
             res.send(HTTP_STATUSES.UNAUTHORIZED_401);
             return;
         }
