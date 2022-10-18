@@ -8,7 +8,7 @@ export const PostValidatorSchema = [
         .isString()
         .withMessage('Incorrect data format!')
         .trim()
-        .isLength({max: 30})
+        .isLength({max: 30,  min: 1})
         .withMessage('Max 30 symbols'),
     body('shortDescription')
         .exists({checkFalsy: true})
@@ -16,7 +16,7 @@ export const PostValidatorSchema = [
         .isString()
         .withMessage('Incorrect data format!')
         .trim()
-        .isLength({max: 100})
+        .isLength({max: 100,  min: 1})
         .withMessage('Max 100 symbols'),
     body('content')
         .exists({checkFalsy: true})
@@ -24,7 +24,7 @@ export const PostValidatorSchema = [
         .isString()
         .withMessage('Incorrect data format!')
         .trim()
-        .isLength({max: 1000})
+        .isLength({max: 1000,  min: 1})
         .withMessage('Max 1000 symbols'),
     body('blogId')
         .exists({checkFalsy: true})

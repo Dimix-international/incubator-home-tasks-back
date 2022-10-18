@@ -8,7 +8,7 @@ export const BlogsValidatorSchema = [
         .isString()
         .withMessage('Incorrect data format!')
         .trim()
-        .isLength({max: 15})
+        .isLength({max: 15, min: 1})
         .withMessage('Max 15 symbols'),
     body('youtubeUrl')
         .exists({checkFalsy: true})
@@ -16,7 +16,7 @@ export const BlogsValidatorSchema = [
         .isString()
         .withMessage('Incorrect data format!')
         .trim()
-        .isLength({max: 100})
+        .isLength({max: 100,  min: 1})
         .withMessage('Max 100 symbols')
         .matches(urlFormat)
         .withMessage('Incorrect url address!'),
