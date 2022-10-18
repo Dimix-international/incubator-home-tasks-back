@@ -1,13 +1,14 @@
-import {Response, Router, Request} from "express";
+import {Request, Response, Router} from "express";
 import {PostsViewModelType} from "../models/posts/PostsViewModelType";
 import {HTTP_STATUSES} from "../data/data";
 import {postsRepository} from "../repositories/posts-repository";
-import {RequestWithBody, RequestWithParams} from "../types/types";
+import {RequestWithBody, RequestWithParams, RequestWithParamsBody} from "../types/types";
 import {PostsURIParamsModel} from "../models/posts/PostsURIParamsModel";
 import {authMiddleware} from "../middlewares/auth-middleware";
 import {PostValidatorSchema} from "../validator-schemas/post-validator-schema";
 import {inputValidatorMiddlewares} from "../middlewares/input-validator-middlewares";
 import {PostCreateModel} from "../models/posts/PostsCreateModel";
+import {PostUpdateModel} from "../models/posts/PostsUpdateModel";
 
 
 export const postsRouter = Router({});
@@ -35,5 +36,25 @@ postsRouter.post('/',
     (req: RequestWithBody<PostCreateModel>, res: Response<PostsViewModelType>) => {
         const newPost = postsRepository.createPost(req.body);
         res.status(HTTP_STATUSES.CREATED_201).send(newPost);
+    }
+)
+
+postsRouter.delete('/:id',
+    authMiddleware,
+    (req: RequestWithParams<PostsURIParamsModel>, res: Response) => {
+        const { id } = req.params;
+        const isDeletedPost = postsRepository.deletePostById(id);
+        res.sendStatus(isDeletedPost ? HTTP_STATUSES.NO_CONTENT_204 : HTTP_STATUSES.NOT_FOUND_404);
+    }
+ )
+
+postsRouter.put('/',
+    authMiddleware,
+    PostValidatorSchema,
+    inputValidatorMiddlewares,
+    (req: RequestWithParamsBody<PostsURIParamsModel, PostUpdateModel>, res: Response) => {
+        const { id } = req.params;
+        const isUpdatedPost = postsRepository.updatePostById(id, req.body);
+        res.sendStatus(isUpdatedPost ? HTTP_STATUSES.NO_CONTENT_204 : HTTP_STATUSES.NOT_FOUND_404);
     }
 )
