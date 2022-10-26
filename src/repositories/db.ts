@@ -3,8 +3,7 @@ import {settings} from "../settings";
 import {BlogViewModel} from "../models/blogs/BlogViewModel";
 import {PostsViewModelType} from "../models/posts/PostsViewModelType";
 
-// const client = new MongoClient(settings.MONGO_URI);
-const client = new MongoClient('mongodb+srv://admin:qwerty123@cluster0.77jtikg.mongodb.net/incubatorProject?retryWrites=true&w=majority')
+const client = new MongoClient(settings.MONGO_URI);
 const db = client.db('social-info');
 
 export const BlogsCollection = db.collection<BlogViewModel>('blogs');

@@ -35,13 +35,8 @@ postsRouter.post('/',
     PostValidatorSchema,
     inputValidatorMiddlewares,
     async (req: RequestWithBody<PostCreateModel>, res: Response<PostsViewModelType>) => {
-        const newPost = await postsRepository.createPost(req.body);
-
-        if (newPost) {
-            res.status(HTTP_STATUSES.CREATED_201).send(newPost);
-        } else {
-            res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400);
-        }
+        const newPost = await postsRepository.createPost(req.body) as PostsViewModelType;
+        res.status(HTTP_STATUSES.CREATED_201).send(newPost);
     }
 )
 

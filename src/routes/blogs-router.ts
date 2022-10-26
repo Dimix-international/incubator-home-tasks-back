@@ -37,18 +37,14 @@ blogsRouter.post('/',
     inputValidatorMiddlewares,
     async (req: RequestWithBody<BlogCreateModel>, res: Response<BlogViewModel>) => {
 
-    const newBlog = await BlogsRepository.createBlog(req.body);
-    if (newBlog) {
-      res.status(HTTP_STATUSES.CREATED_201).send(newBlog);
-      return;
-    }
-    res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400);
+    const newBlog = await BlogsRepository.createBlog(req.body) as BlogViewModel;
+    res.status(HTTP_STATUSES.CREATED_201).send(newBlog);
 });
 
 blogsRouter.delete('/:id', authMiddleware, async (req:RequestWithParams<BlogURIParamsModel>, res: Response) => {
     const { id } = req.params;
     const isDeletedBlog = await BlogsRepository.deleteBlogById(id);
-    return res.sendStatus(isDeletedBlog ? HTTP_STATUSES.NO_CONTENT_204 : HTTP_STATUSES.NOT_FOUND_404);
+    res.sendStatus(isDeletedBlog ? HTTP_STATUSES.NO_CONTENT_204 : HTTP_STATUSES.NOT_FOUND_404);
 });
 
 blogsRouter.put('/:id',
