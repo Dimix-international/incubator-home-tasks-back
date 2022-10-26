@@ -12,6 +12,7 @@ export const PostsCollection = db.collection<PostsViewModelType>('posts');
 export const runDb = async () => {
     try {
         await client.connect();
+        await client.db('social-info').command({ping: 1});
         console.log('Connected successfully to mongo server!');
     } catch (e) {
         if (e instanceof Error) {
