@@ -9,17 +9,13 @@ const db = client.db('social-info');
 export const BlogsCollection = db.collection<BlogViewModel>('blogs');
 export const PostsCollection = db.collection<PostsViewModelType>('posts');
 
-export const runDb = async () => {
+export async function runDb() {
     try {
         await client.connect();
         await client.db('social-info').command({ping: 1});
         console.log('Connected successfully to mongo server!');
     } catch (e) {
-        if (e instanceof Error) {
-            console.log(e.message)
-        } else {
-            console.log('Was error when connected');
-        }
+        console.log(e)
         await client.close();
     }
 }

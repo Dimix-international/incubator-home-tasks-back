@@ -5,10 +5,10 @@ import {BlogsCollection} from "./db";
 
 export const BlogsRepository = {
    async getBlogs() {
-       return BlogsCollection.find({}, { projection: { _id: 0 }}).sort({createdAt: 1}).toArray();
+       return await BlogsCollection.find({}, { projection: { _id: 0 }}).sort({createdAt: 1}).toArray();
     },
     async getBlogById (id: string) {
-        return BlogsCollection.findOne({id}, { projection: { _id: 0 }});
+        return await BlogsCollection.findOne({id}, { projection: { _id: 0 }});
     },
     async createBlog (data: BlogCreateModel) {
         const { name, youtubeUrl } = data;

@@ -1,14 +1,13 @@
 import express, {Request, Response} from 'express';
 import bodyParser from "body-parser";
 import { videosRouter } from "./routes/videos-router";
-import {testingDataRouter} from "./routes/all_data-router";
 import {blogsRouter} from "./routes/blogs-router";
 import {postsRouter} from "./routes/posts-router";
 import {runDb} from "./repositories/db";
 import {testingDataRepository} from "./repositories/testing-data-repository";
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 const parserMiddleware = bodyParser({});
 
