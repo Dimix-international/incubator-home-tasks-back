@@ -13,15 +13,8 @@ const parserMiddleware = bodyParser({});
 
 app.use(parserMiddleware);
 
-app.use('/videos', videosRouter);
 app.use('/blogs', blogsRouter);
 app.use('/posts', postsRouter);
-
-app.delete('/testing/all-data', async (req:Request, res:Response) => {
-    await testingDataRepository.deleteAllData();
-    return res.sendStatus(204);
-})
-
 
 const start = async () => {
     try {
@@ -35,3 +28,8 @@ const start = async () => {
 }
 
 start();
+
+app.delete('/testing/all-data', async (req:Request, res:Response) => {
+    await testingDataRepository.deleteAllData();
+    return res.sendStatus(204);
+})

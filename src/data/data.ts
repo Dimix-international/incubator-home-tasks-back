@@ -3,7 +3,7 @@ import {BlogViewModel} from "../models/blogs/BlogViewModel";
 import {PostsViewModelType} from "../models/posts/PostsViewModelType";
 
 
-export const enum HTTP_STATUSES {
+export enum HTTP_STATUSES {
     OK_200 = 200,
     CREATED_201 = 201,
     NO_CONTENT_204 = 204,
