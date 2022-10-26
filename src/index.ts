@@ -20,7 +20,7 @@ app.use('/posts', postsRouter);
 
 app.delete('/testing/all-data', async (req:Request, res:Response) => {
     await testingDataRepository.deleteAllData();
-    res.send(204);
+    return res.sendStatus(204);
 })
 
 
