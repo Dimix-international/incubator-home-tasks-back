@@ -40,6 +40,7 @@ blogsRouter.post('/',
     const newBlog = await BlogsRepository.createBlog(req.body);
     if (newBlog) {
       res.status(HTTP_STATUSES.CREATED_201).send(newBlog);
+      return;
     }
     res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400);
 });
