@@ -1,5 +1,6 @@
 export type BlogViewModel = {
     id: string,
     name: string,
-    youtubeUrl: string
+    youtubeUrl: string,
+    createdAt: Date,
 }

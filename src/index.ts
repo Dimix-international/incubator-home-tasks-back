@@ -4,8 +4,7 @@ import { videosRouter } from "./routes/videos-router";
 import {testingDataRouter} from "./routes/all_data-router";
 import {blogsRouter} from "./routes/blogs-router";
 import {postsRouter} from "./routes/posts-router";
-import {MongoClient} from 'mongodb';
-const client = new MongoClient('mongodb+srv://admin:qwerty123@cluster0.77jtikg.mongodb.net/incubatorProject?retryWrites=true&w=majority')
+import {runDb} from "./repositories/db";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -22,7 +21,7 @@ app.use('/posts', postsRouter);
 
 const start = async () => {
     try {
-        await client.connect();
+        await runDb();
         app.listen(port, () => {
             console.log(`App is listening on port ${port}`)
         })

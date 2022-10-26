@@ -1,59 +1,47 @@
-import {Data} from "../data/data";
 import {PostCreateModel} from "../models/posts/PostsCreateModel";
-import {PostsViewModelType} from "../models/posts/PostsViewModelType";
 import {PostUpdateModel} from "../models/posts/PostsUpdateModel";
+import {BlogsCollection, PostsCollection} from "./db";
 
 
 export const postsRepository = {
-    getPosts () {
-        return Data.postsData
+    async getPosts () {
+        return await PostsCollection.find({}, { projection: { _id: 0 }}).sort({createdAt: 1}).toArray();
     },
-    getPostById (id: string) {
-        return Data.postsData.find(post => post.id === id);
+    async getPostById (id: string) {
+        return await PostsCollection.findOne({id}, { projection: { _id: 0 }});
     },
-    createPost (data: PostCreateModel) {
+    async createPost (data: PostCreateModel) {
 
         const { blogId } = data;
-        const blog = Data.blogsData.find(blog => blog.id === blogId)!;
+        const blog = await BlogsCollection.findOne({id: blogId});
 
-        const { name } = blog;
-        const newPost:PostsViewModelType = {
-            id: String(Math.random()),
-            ...data,
-            blogName: name
-        };
+        if (blog) {
+            const { name } = blog;
 
-        Data.postsData.push(newPost);
-        return newPost;
-    },
-    deletePostById (id: string) {
-        const deletedPostIndex = Data.postsData.findIndex(post => post.id === id);
+            const insertedBlog = await PostsCollection.insertOne({
+                id: String(Math.random()),
+                ...data,
+                blogName: name,
+                createdAt: new Date()
+            });
 
-        if (deletedPostIndex !== -1) {
-            Data.postsData.splice(deletedPostIndex, 1);
-            return true;
+            return await PostsCollection.findOne(insertedBlog.insertedId, { projection: { _id: 0 }});
         }
-        return false;
+        return null;
+
     },
-    updatePostById (id: string, data: PostUpdateModel) {
-
-        const updatedPost = Data.postsData.find(post => post.id === id);
-
-        if (updatedPost) {
-            const { blogId, shortDescription, content, title } = data;
-
-            const { name } = Data.blogsData.find(blog => blog.id === blogId)!;
-
-            updatedPost.blogId = blogId;
-            updatedPost.shortDescription = shortDescription;
-            updatedPost.content = content;
-            updatedPost.title = title;
-            updatedPost.blogName = name;
-
-            return true;
-
-        }
-
-        return false;
+    async deletePostById (id: string) {
+        const {deletedCount} = await PostsCollection.deleteOne({id});
+        return !!deletedCount;
+    },
+    async updatePostById (id: string, data: PostUpdateModel) {
+        const { blogId, shortDescription, content, title } = data;
+        const {matchedCount} = await PostsCollection.updateOne(
+            {id},
+            {
+                $set: {blogId, shortDescription, content, title}
+            }
+        )
+        return !!matchedCount;
     }
 }

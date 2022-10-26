@@ -1,46 +1,39 @@
-import {Data} from "../data/data";
 import {BlogCreateModel} from "../models/blogs/BlogCreateModel";
 import {BlogUpdateModel} from "../models/blogs/BlogUpdateModel";
+import {BlogsCollection} from "./db";
 
 
 export const BlogsRepository = {
-    getBlogs() {
-        return Data.blogsData
+   async getBlogs() {
+       return BlogsCollection.find({}, { projection: { _id: 0 }}).sort({createdAt: 1}).toArray();
     },
-    getBlogById (id: string) {
-        return Data.blogsData.find(blog => blog.id === id);
+    async getBlogById (id: string) {
+        return BlogsCollection.findOne({id}, { projection: { _id: 0 }});
     },
-    createBlog (data: BlogCreateModel) {
+    async createBlog (data: BlogCreateModel) {
         const { name, youtubeUrl } = data;
 
-        const newBlog = {
+        const insertedBlog = await BlogsCollection.insertOne({
             id: String(Math.random()),
             name,
             youtubeUrl,
-        };
+            createdAt: new Date()
+        });
 
-        Data.blogsData.push(newBlog);
-        return newBlog;
+        return await BlogsCollection.findOne(insertedBlog.insertedId, { projection: { _id: 0 }});
     },
-    deleteBlogById (id: string) {
-        const deletingBlogIndex = Data.blogsData.findIndex(blog => blog.id === id);
-        if (deletingBlogIndex !== -1) {
-            Data.blogsData.splice(deletingBlogIndex, 1);
-            return true;
-        }
-        return false;
+    async deleteBlogById (id: string) {
+      const {deletedCount} = await BlogsCollection.deleteOne({id});
+      return !!deletedCount;
     },
-    updateBlogById (id: string, data: BlogUpdateModel) {
-        const updatedBlog = Data.blogsData.find(blog => blog.id === id);
-
-        if (updatedBlog) {
-            const { name, youtubeUrl } = data;
-            updatedBlog.name = name;
-            updatedBlog.youtubeUrl = youtubeUrl;
-
-            return true;
-        }
-        return false;
-
+    async updateBlogById (id: string, data: BlogUpdateModel) {
+       const {name, youtubeUrl} = data;
+       const {matchedCount} = await BlogsCollection.updateOne(
+            {id},
+            {
+                $set: {name, youtubeUrl}
+            }
+        );
+        return !!matchedCount;
     }
 }

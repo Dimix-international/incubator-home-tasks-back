@@ -5,4 +5,4 @@ export const enum Roles {
     ADMIN = 'admin'
 }
 
-export const PASSWORD_ADMIN = 'qwerty'; //qwerty123
+export const PASSWORD_ADMIN = 'qwerty';

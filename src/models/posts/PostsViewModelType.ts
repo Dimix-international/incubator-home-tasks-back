@@ -4,5 +4,6 @@ export type PostsViewModelType = {
     shortDescription: string,
     content: string,
     blogId: string,
-    blogName: string
+    blogName: string,
+    createdAt: Date,
 }

@@ -1,10 +1,8 @@
-import {Data} from "../data/data";
+import {BlogsCollection, PostsCollection} from "./db";
 
 
 export const testingDataRepository = {
-    deleteAllData () {
-        Data.videosData = [];
-        Data.blogsData = [];
-        Data.postsData = [];
+    async deleteAllData () {
+        await Promise.all([BlogsCollection.deleteMany({}), PostsCollection.deleteMany({})]);
     }
 }
