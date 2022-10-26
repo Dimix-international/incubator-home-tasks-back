@@ -15,7 +15,7 @@ export const postsRouter = Router({});
 
 postsRouter.get('/', async (req: Request, res: Response<PostsViewModelType[]>) => {
     const posts = await postsRepository.getPosts();
-    res.status(HTTP_STATUSES.OK_200).send(posts)
+    res.status(HTTP_STATUSES.OK_200).send(posts);
 });
 
 postsRouter.get('/:id', async (req: RequestWithParams<PostsURIParamsModel>,  res: Response<PostsViewModelType>) => {
