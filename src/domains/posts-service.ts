@@ -16,19 +16,23 @@ export const postsService = {
         const blog = await BlogsRepository.getBlogById(blogId);
         if (blog) {
             const { name } = blog;
-            return await postsRepository.createPost({
+            const newPost = {
                 id: String(Math.random()),
                 ...data,
                 blogName: name,
                 createdAt: new Date()
-            });
+            };
+            await postsRepository.createPost(newPost);
+            return postsRepository.getPostById(newPost.id);
         }
         return null;
     },
-     deletePostById (id: string) {
-        return postsRepository.deletePostById(id)
+     async deletePostById (id: string) {
+         const {deletedCount} = await postsRepository.deletePostById(id);
+         return !!deletedCount;
     },
     async updatePostById (id: string, data: PostUpdateModel) {
-        return postsRepository.updatePostById(id, data);
+        const {matchedCount} = await postsRepository.updatePostById(id, data);
+        return !!matchedCount;
     }
 }

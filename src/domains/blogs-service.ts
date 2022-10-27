@@ -9,7 +9,7 @@ export const BlogsService = {
     getBlogById (id: string) {
         return  BlogsRepository.getBlogById(id);
     },
-    createBlog (data: BlogCreateModel) {
+    async createBlog (data: BlogCreateModel) {
         const { name, youtubeUrl } = data;
 
         const insertedBlog = {
@@ -19,12 +19,15 @@ export const BlogsService = {
             createdAt: new Date()
         };
 
-        return BlogsRepository.createBlog(insertedBlog);
+        await BlogsRepository.createBlog(insertedBlog);
+        return BlogsRepository.getBlogById(insertedBlog.id);
     },
-     deleteBlogById (id: string) {
-        return BlogsRepository.deleteBlogById(id);
+    async deleteBlogById (id: string) {
+         const {deletedCount} = await BlogsRepository.deleteBlogById(id);
+         return !!deletedCount;
     },
-     updateBlogById (id: string, data: BlogUpdateModel) {
-        return BlogsRepository.updateBlogById(id, data)
+     async updateBlogById (id: string, data: BlogUpdateModel) {
+         const {matchedCount} = await BlogsRepository.updateBlogById(id, data);
+         return !!matchedCount;
     }
 }

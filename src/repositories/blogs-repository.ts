@@ -12,21 +12,18 @@ export const BlogsRepository = {
         return BlogsCollection.findOne({id}, { projection: { _id: 0 }});
     },
     async createBlog (blog:BlogViewModel) {
-       await BlogsCollection.insertOne(blog);
-       return await BlogsCollection.findOne({id: blog.id}, { projection: { _id: 0 }});
+      return await BlogsCollection.insertOne(blog);
     },
     async deleteBlogById (id: string) {
-      const {deletedCount} = await BlogsCollection.deleteOne({id});
-      return !!deletedCount;
+      return await BlogsCollection.deleteOne({id});
     },
     async updateBlogById (id: string, data: BlogUpdateModel) {
        const {name, youtubeUrl} = data;
-       const {matchedCount} = await BlogsCollection.updateOne(
+       return await BlogsCollection.updateOne(
             {id},
             {
                 $set: {name, youtubeUrl}
             }
         );
-        return !!matchedCount;
     }
 }

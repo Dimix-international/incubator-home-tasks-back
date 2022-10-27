@@ -17,21 +17,18 @@ export const postsRepository = {
         return await PostsCollection.findOne({id}, { projection: { _id: 0 }});
     },
     async createPost (data: CreatePostType) {
-        await PostsCollection.insertOne(data);
-        return await postsRepository.getPostById(data.id)
+       return await PostsCollection.insertOne(data);
     },
     async deletePostById (id: string) {
-        const {deletedCount} = await PostsCollection.deleteOne({id});
-        return !!deletedCount;
+        return await PostsCollection.deleteOne({id});
     },
     async updatePostById (id: string, data: PostUpdateModel) {
         const { blogId, shortDescription, content, title } = data;
-        const {matchedCount} = await PostsCollection.updateOne(
+        return await PostsCollection.updateOne(
             {id},
             {
                 $set: {blogId, shortDescription, content, title}
             }
         )
-        return !!matchedCount;
     }
 }
