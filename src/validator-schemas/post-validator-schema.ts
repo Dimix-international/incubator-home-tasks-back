@@ -1,5 +1,5 @@
 import {body} from "express-validator";
-import {BlogsCollection} from "../repositories/db";
+import {BlogsRepository} from "../repositories/blogs-repository";
 
 export const PostValidatorSchema = [
     body('title')
@@ -33,7 +33,7 @@ export const PostValidatorSchema = [
         .exists({checkFalsy: true})
         .withMessage('This field is required!')
         .custom(async (blogId) => {
-            const searchedBlog = await BlogsCollection.findOne({id: blogId});
+            const searchedBlog = await BlogsRepository.getBlogById(blogId);
             if (!searchedBlog) {
                 throw new Error('Blog does not exist!');
             }

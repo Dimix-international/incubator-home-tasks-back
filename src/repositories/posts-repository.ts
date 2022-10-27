@@ -3,6 +3,12 @@ import {PostUpdateModel} from "../models/posts/PostsUpdateModel";
 import {BlogsCollection, PostsCollection} from "./db";
 
 
+type CreatePostType = PostCreateModel & {
+    id: string,
+    blogName: string,
+    createdAt: Date,
+}
+
 export const postsRepository = {
     async getPosts () {
         return await PostsCollection.find({}, { projection: { _id: 0 }}).sort({createdAt: 1}).toArray();
@@ -10,25 +16,9 @@ export const postsRepository = {
     async getPostById (id: string) {
         return await PostsCollection.findOne({id}, { projection: { _id: 0 }});
     },
-    async createPost (data: PostCreateModel) {
-
-        const { blogId } = data;
-        const blog = await BlogsCollection.findOne({id: blogId});
-
-        if (blog) {
-            const { name } = blog;
-
-            const insertedBlog = await PostsCollection.insertOne({
-                id: String(Math.random()),
-                ...data,
-                blogName: name,
-                createdAt: new Date()
-            });
-
-            return await PostsCollection.findOne(insertedBlog.insertedId, { projection: { _id: 0 }});
-        }
-        return null;
-
+    async createPost (data: CreatePostType) {
+        await PostsCollection.insertOne(data);
+        return await postsRepository.getPostById(data.id)
     },
     async deletePostById (id: string) {
         const {deletedCount} = await PostsCollection.deleteOne({id});
