@@ -5,10 +5,10 @@ import {BlogsCollection, PostsCollection} from "./db";
 
 export const postsRepository = {
     async getPosts () {
-        return await PostsCollection.find({}, { projection: { _id: 0 }}).sort({createdAt: 1}).toArray();
+        return PostsCollection.find({}, {_id: 0}).sort({createdAt: 1});
     },
     async getPostById (id: string) {
-        return await PostsCollection.findOne({id}, { projection: { _id: 0 }});
+        return PostsCollection.findOne({id}, {_id: 0});
     },
     async createPost (data: PostCreateModel) {
 
@@ -18,14 +18,14 @@ export const postsRepository = {
         if (blog) {
             const { name } = blog;
 
-            const insertedBlog = await PostsCollection.insertOne({
+            const newBlog = await PostsCollection.create({
                 id: String(Math.random()),
                 ...data,
                 blogName: name,
                 createdAt: new Date()
             });
 
-            return await PostsCollection.findOne(insertedBlog.insertedId, { projection: { _id: 0 }});
+            return PostsCollection.findOne({_id: newBlog._id}, { _id: 0, __v: 0 });
         }
         return null;
 

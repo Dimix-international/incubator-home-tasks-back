@@ -1,21 +1,16 @@
-import {MongoClient} from "mongodb";
 import {settings} from "../settings";
-import {BlogViewModel} from "../models/blogs/BlogViewModel";
-import {PostsViewModelType} from "../models/posts/PostsViewModelType";
+import mongoose from 'mongoose';
+import BlogSchema from "../schemasMongoose/BlogSchema";
+import PostSchema from "../schemasMongoose/PostSchema";
 
-const client = new MongoClient(settings.MONGO_URI);
-const db = client.db('social-info');
-
-export const BlogsCollection = db.collection<BlogViewModel>('blogs');
-export const PostsCollection = db.collection<PostsViewModelType>('posts');
+export const BlogsCollection = BlogSchema;
+export const PostsCollection = PostSchema;
 
 export async function runDb() {
     try {
-        await client.connect();
-        await client.db('social-info').command({ping: 1});
+        await mongoose.connect(settings.MONGO_URI)
         console.log('Connected successfully to mongo server!');
     } catch (e) {
         console.log(e)
-        await client.close();
     }
 }

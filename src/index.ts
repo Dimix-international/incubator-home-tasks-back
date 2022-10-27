@@ -1,10 +1,10 @@
-import express, {Request, Response} from 'express';
+import express from 'express';
 import bodyParser from "body-parser";
 import {blogsRouter} from "./routes/blogs-router";
 import {postsRouter} from "./routes/posts-router";
 import {runDb} from "./repositories/db";
-import {testingDataRepository} from "./repositories/testing-data-repository";
 import {testingDataRouter} from "./routes/all_data-router";
+import {videosRouter} from "./routes/videos-router";
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -16,6 +16,7 @@ app.use(parserMiddleware);
 app.use('/testing', testingDataRouter);
 app.use('/blogs', blogsRouter);
 app.use('/posts', postsRouter);
+app.use('/videos', videosRouter);
 
 const start = async () => {
     try {
@@ -29,8 +30,3 @@ const start = async () => {
 }
 
 start();
-
-app.delete('/testing/all-data', async (req:Request, res:Response) => {
-    await testingDataRepository.deleteAllData();
-    return res.sendStatus(204);
-})
