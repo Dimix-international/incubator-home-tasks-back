@@ -1,17 +1,10 @@
 import {PostCreateModel} from "../models/posts/PostsCreateModel";
 import {PostUpdateModel} from "../models/posts/PostsUpdateModel";
-import {postsRepository} from "../repositories/posts-repository";
-import {BlogsRepository} from "../repositories/blogs-repository";
-
+import {postsRepository} from "../repositories/posts-repository/posts-repository";
+import {BlogsRepository} from "../repositories/blogs-repository/blogs-repository";
 
 export const postsService = {
-    getPosts () {
-        return postsRepository.getPosts()
-    },
-    getPostById (id: string) {
-        return  postsRepository.getPostById(id);
-    },
-    async createPost (data: PostCreateModel) {
+    async createPost (data: PostCreateModel): Promise<CreatePostType | null> {
         const { blogId } = data;
         const blog = await BlogsRepository.getBlogById(blogId);
         if (blog) {
@@ -23,16 +16,41 @@ export const postsService = {
                 createdAt: new Date()
             };
             await postsRepository.createPost(newPost);
-            return postsRepository.getPostById(newPost.id);
+            return {
+                id: newPost.id,
+                createdAt: newPost.createdAt,
+                blogName: newPost.blogName,
+                title: newPost.title,
+                content: newPost.content,
+                blogId: newPost.blogId,
+                shortDescription: newPost.shortDescription
+            };
         }
         return null;
     },
-     async deletePostById (id: string) {
+     async deletePostById (id: string): Promise<Boolean> {
          const {deletedCount} = await postsRepository.deletePostById(id);
          return !!deletedCount;
     },
-    async updatePostById (id: string, data: PostUpdateModel) {
+    async updatePostById (id: string, data: PostUpdateModel): Promise<Boolean> {
         const {matchedCount} = await postsRepository.updatePostById(id, data);
         return !!matchedCount;
     }
+}
+
+export type CreatePostType = {
+    id: string,
+    blogName: string,
+    createdAt: Date,
+    title: string,
+    shortDescription: string,
+    content: string,
+    blogId: string,
+}
+
+export type UpdatePostType = {
+    title: string,
+    shortDescription: string,
+    content: string,
+    blogId: string,
 }

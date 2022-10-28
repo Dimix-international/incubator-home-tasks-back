@@ -1,15 +1,10 @@
 import {BlogCreateModel} from "../models/blogs/BlogCreateModel";
 import {BlogUpdateModel} from "../models/blogs/BlogUpdateModel";
-import {BlogsRepository} from "../repositories/blogs-repository";
+import {BlogsRepository} from "../repositories/blogs-repository/blogs-repository";
+import {BlogViewModel} from "../models/blogs/BlogViewModel";
 
 export const BlogsService = {
-    getBlogs() {
-        return BlogsRepository.getBlogs();
-    },
-    getBlogById (id: string) {
-        return  BlogsRepository.getBlogById(id);
-    },
-    async createBlog (data: BlogCreateModel) {
+    async createBlog (data: BlogCreateModel): Promise<BlogViewModel | null> {
         const { name, youtubeUrl } = data;
 
         const insertedBlog = {
@@ -20,9 +15,14 @@ export const BlogsService = {
         };
 
         await BlogsRepository.createBlog(insertedBlog);
-        return BlogsRepository.getBlogById(insertedBlog.id);
+        return {
+            name: insertedBlog.name,
+            createdAt: insertedBlog.createdAt,
+            id: insertedBlog.id,
+            youtubeUrl: insertedBlog.youtubeUrl
+        }
     },
-    async deleteBlogById (id: string) {
+    async deleteBlogById (id: string): Promise<Boolean> {
          const {deletedCount} = await BlogsRepository.deleteBlogById(id);
          return !!deletedCount;
     },
@@ -31,3 +31,4 @@ export const BlogsService = {
          return !!matchedCount;
     }
 }
+

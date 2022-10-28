@@ -9,12 +9,13 @@ import {BlogCreateModel} from "../models/blogs/BlogCreateModel";
 import {authMiddleware} from "../middlewares/auth-middleware";
 import {BlogUpdateModel} from "../models/blogs/BlogUpdateModel";
 import {BlogsService} from "../domains/blogs-service";
+import {BlogsQueryRepository} from "../repositories/blogs-repository/blogs-query-repository";
 
 
 export const blogsRouter = Router({});
 
 blogsRouter.get('/', async (req: Request, res: Response<BlogViewModel[]>) => {
-    const blogs = await BlogsService.getBlogs();
+    const blogs = await BlogsQueryRepository.getBlogs();
     res.status(HTTP_STATUSES.OK_200).send(blogs);
 });
 
@@ -22,7 +23,7 @@ blogsRouter.get('/:id', async (req: RequestWithParams<BlogURIParamsModel>, res: 
 
     const { id } = req.params;
 
-    const searchedBlog = await BlogsService.getBlogById(id);
+    const searchedBlog = await BlogsQueryRepository.getBlogById(id);
 
     if (searchedBlog) {
         res.status(HTTP_STATUSES.OK_200).send(searchedBlog);

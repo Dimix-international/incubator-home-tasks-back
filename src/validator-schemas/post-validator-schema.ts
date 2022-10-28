@@ -1,5 +1,5 @@
 import {body} from "express-validator";
-import {BlogsRepository} from "../repositories/blogs-repository";
+import {BlogsRepository} from "../repositories/blogs-repository/blogs-repository";
 
 export const PostValidatorSchema = [
     body('title')

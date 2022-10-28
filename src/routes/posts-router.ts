@@ -9,19 +9,20 @@ import {inputValidatorMiddlewares} from "../middlewares/input-validator-middlewa
 import {PostCreateModel} from "../models/posts/PostsCreateModel";
 import {PostUpdateModel} from "../models/posts/PostsUpdateModel";
 import {postsService} from "../domains/posts-service";
+import {PostsQueryRepository} from "../repositories/posts-repository/posts-query-repository";
 
 
 export const postsRouter = Router({});
 
 postsRouter.get('/', async (req: Request, res: Response<PostsViewModelType[]>) => {
-    const posts = await postsService.getPosts();
+    const posts = await PostsQueryRepository.getPosts();
     res.status(HTTP_STATUSES.OK_200).send(posts);
 });
 
 postsRouter.get('/:id', async (req: RequestWithParams<PostsURIParamsModel>,  res: Response<PostsViewModelType>) => {
     const {id} = req.params
 
-    const searchPost = await postsService.getPostById(id);
+    const searchPost = await PostsQueryRepository.getPostById(id);
 
     if (searchPost) {
         res.status(HTTP_STATUSES.OK_200).send(searchPost);
