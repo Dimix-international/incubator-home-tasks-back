@@ -1,12 +1,12 @@
 import {PostCreateModel} from "../models/posts/PostsCreateModel";
 import {PostUpdateModel} from "../models/posts/PostsUpdateModel";
 import {postsRepository} from "../repositories/posts-repository/posts-repository";
-import {BlogsRepository} from "../repositories/blogs-repository/blogs-repository";
+import {BlogsQueryRepository} from "../repositories/blogs-repository/blogs-query-repository";
 
 export const postsService = {
     async createPost (data: PostCreateModel): Promise<CreatePostType | null> {
         const { blogId } = data;
-        const blog = await BlogsRepository.getBlogById(blogId);
+        const blog = await BlogsQueryRepository.getBlogById(blogId);
         if (blog) {
             const { name } = blog;
             const newPost = {

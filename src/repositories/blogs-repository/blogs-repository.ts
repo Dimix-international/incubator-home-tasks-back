@@ -4,9 +4,6 @@ import {BlogViewModel} from "../../models/blogs/BlogViewModel";
 
 
 export const BlogsRepository = {
-    async getBlogById (id: string) {
-        return BlogsCollection.findOne({id}, { projection: { _id: 0 }});
-    },
     async createBlog (blog:BlogViewModel) {
       return await BlogsCollection.insertOne(blog);
     },
