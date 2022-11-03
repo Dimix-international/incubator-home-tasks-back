@@ -112,7 +112,8 @@ blogsRouter.get('/:blogId/posts',
         const searchBlog = await BlogsQueryRepository.getBlogById(blogId);
 
         if (!searchBlog) {
-            res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
+            res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
+            return;
         }
         
         const {
