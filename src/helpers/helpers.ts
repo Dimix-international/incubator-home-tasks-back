@@ -19,7 +19,7 @@ export const transformInNumber = (num: string, defaultValue: number) => {
 }
 
 export const checkSortBy = (sortValue: string, sortObj: any, defaultValue: string) => {
-    if (Object.keys(sortObj).includes(sortValue)) return sortValue;
+    if(Object.keys(sortObj).includes(sortValue)) return sortValue;
     return defaultValue
 }
 
