@@ -106,6 +106,13 @@ blogsRouter.get('/:blogId/posts',
            res: Response<PostsForBlogViewModel>) => {
 
         const {blogId} = req.params;
+
+        const searchBlog = await BlogsQueryRepository.getBlogById(blogId);
+
+        if (!searchBlog) {
+            res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
+        }
+        
         const {
             pageNumber = 1,
             pageSize = 10,

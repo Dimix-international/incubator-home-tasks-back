@@ -29,8 +29,3 @@ const start = async () => {
 }
 
 start();
-
-app.delete('/testing/all-data', async (req:Request, res:Response) => {
-    await testingDataRepository.deleteAllData();
-    return res.sendStatus(204);
-})
