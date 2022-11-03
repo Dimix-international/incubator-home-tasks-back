@@ -24,8 +24,8 @@ export const checkSortBy = (sortValue: string, sortObj: any, defaultValue: strin
 }
 
 export const checkValueSortDirection = (value: string): 'asc' | 'desc' => {
-    if(value !== 'asc' && value !== 'desc') return 'desc';
-    return 'desc';
+    if (value !== 'asc' && value !== 'desc') return 'desc';
+    return value;
 }
 
 
