@@ -1,13 +1,11 @@
-import {MongoClient} from "mongodb";
+import {MongoClient, ObjectId} from "mongodb";
 import {settings} from "../settings";
-import {BlogViewModel} from "../models/blogs/BlogViewModel";
-import {PostsViewModelType} from "../models/posts/PostsViewModelType";
 
 const client = new MongoClient(settings.MONGO_URI);
 const db = client.db('social-info');
 
-export const BlogsCollection = db.collection<BlogViewModel>('blogs');
-export const PostsCollection = db.collection<PostsViewModelType>('posts');
+export const BlogsCollection = db.collection<BlogType>('blogs');
+export const PostsCollection = db.collection<PostType>('posts');
 
 export async function runDb() {
     try {
@@ -18,4 +16,21 @@ export async function runDb() {
         console.log(e)
         await client.close();
     }
+}
+
+type BlogType = {
+    id: string,
+    name: string,
+    youtubeUrl: string,
+    createdAt: Date,
+}
+
+type PostType = {
+    id: string,
+    title: string,
+    shortDescription: string,
+    content: string,
+    blogId: string,
+    blogName: string,
+    createdAt: Date,
 }

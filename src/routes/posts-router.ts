@@ -1,7 +1,7 @@
 import {Request, Response, Router} from "express";
-import {PostsViewModelType} from "../models/posts/PostsViewModelType";
+import {PostsViewModelType, PostViewModelType} from "../models/posts/PostsViewModelType";
 import {HTTP_STATUSES} from "../data/data";
-import {RequestWithBody, RequestWithParams, RequestWithParamsBody} from "../types/types";
+import {RequestWithBody, RequestWithParams, RequestWithParamsBody, RequestWithQuery} from "../types/types";
 import {PostsURIParamsModel} from "../models/posts/PostsURIParamsModel";
 import {authMiddleware} from "../middlewares/auth-middleware";
 import {PostValidatorSchema} from "../validator-schemas/post-validator-schema";
@@ -10,16 +10,24 @@ import {PostCreateModel} from "../models/posts/PostsCreateModel";
 import {PostUpdateModel} from "../models/posts/PostsUpdateModel";
 import {postsService} from "../domains/posts-service";
 import {PostsQueryRepository} from "../repositories/posts-repository/posts-query-repository";
+import {PostsGetModel} from "../models/posts/PostsGetModel";
 
 
 export const postsRouter = Router({});
 
-postsRouter.get('/', async (req: Request, res: Response<PostsViewModelType[]>) => {
-    const posts = await PostsQueryRepository.getPosts();
+postsRouter.get('/', async (req: RequestWithQuery<PostsGetModel>, res: Response<PostsViewModelType>) => {
+    const {
+        pageNumber = 1,
+        pageSize = 10,
+        sortBy = 'createdAt',
+        sortDirection = 'desc'
+    } = req.query;
+
+    const posts = await PostsQueryRepository.getPosts(pageNumber, pageSize, sortBy, sortDirection);
     res.status(HTTP_STATUSES.OK_200).send(posts);
 });
 
-postsRouter.get('/:id', async (req: RequestWithParams<PostsURIParamsModel>,  res: Response<PostsViewModelType>) => {
+postsRouter.get('/:id', async (req: RequestWithParams<PostsURIParamsModel>,  res: Response<PostViewModelType>) => {
     const {id} = req.params
 
     const searchPost = await PostsQueryRepository.getPostById(id);
@@ -35,8 +43,8 @@ postsRouter.post('/',
     authMiddleware,
     PostValidatorSchema,
     inputValidatorMiddlewares,
-    async (req: RequestWithBody<PostCreateModel>, res: Response<PostsViewModelType>) => {
-        const newPost = await postsService.createPost(req.body) as PostsViewModelType;
+    async (req: RequestWithBody<PostCreateModel>, res: Response<PostViewModelType>) => {
+        const newPost = await postsService.createPost(req.body) as PostViewModelType;
         res.status(HTTP_STATUSES.CREATED_201).send(newPost);
     }
 )
