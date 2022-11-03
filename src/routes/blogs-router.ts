@@ -94,9 +94,11 @@ blogsRouter.post('/:blogId/posts',
     const post = await postsService.createPost({blogId,title, content, shortDescription });
 
     if (!post) {
-        res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
+        res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
+        return;
     } else {
         res.status(HTTP_STATUSES.CREATED_201).send(post);
+        return;
     }
 
 });
