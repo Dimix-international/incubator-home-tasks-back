@@ -13,7 +13,6 @@ const parserMiddleware = bodyParser({});
 
 app.use(parserMiddleware);
 
-app.use('/testing', testingDataRouter);
 app.use('/blogs', blogsRouter);
 app.use('/posts', postsRouter);
 
@@ -29,3 +28,8 @@ const start = async () => {
 }
 
 start();
+
+app.delete('/testing/all-data', async (req:Request, res:Response) => {
+    await testingDataRepository.deleteAllData();
+    return res.sendStatus(204);
+})
