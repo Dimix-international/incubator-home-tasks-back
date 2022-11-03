@@ -1,8 +1,8 @@
 import {PostViewModelType} from "./PostsViewModelType";
 
 export type PostsGetModel = {
-    pageNumber: number,
-    pageSize: number,
+    pageNumber: string,
+    pageSize: string,
     sortBy: keyof Omit<PostViewModelType, 'id'>,
     sortDirection: 'asc' | 'desc'
 }

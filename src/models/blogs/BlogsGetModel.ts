@@ -2,8 +2,8 @@ import {BlogViewModel} from "./BlogViewModel";
 
 export type BlogsGetModel = {
     searchNameTerm: string | null,
-    pageNumber: number,
-    pageSize: number,
+    pageNumber: string,
+    pageSize: string,
     sortBy: keyof Omit<BlogViewModel, 'id'>,
     sortDirection: 'asc' | 'desc'
 }

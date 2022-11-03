@@ -24,6 +24,7 @@ import {CreatePostForBlogValidatorSchema} from "../validator-schemas/create-post
 import {postsService} from "../domains/posts-service";
 import {PostsQueryRepository} from "../repositories/posts-repository/posts-query-repository";
 import {PostsGetModel} from "../models/posts/PostsGetModel";
+import {checkValueSortDirection, transformInNumber} from "../helpers/helpers";
 
 
 export const blogsRouter = Router({});
@@ -31,13 +32,19 @@ export const blogsRouter = Router({});
 blogsRouter.get('/', async (req: RequestWithQuery<BlogsGetModel>, res: Response<BlogsViewModel>) => {
     const {
         searchNameTerm = null,
-        pageNumber = 1,
-        pageSize = 10,
+        pageNumber ,
+        pageSize,
         sortBy = 'createdAt',
-        sortDirection = 'desc'
+        sortDirection
     } = req.query;
 
-    const blogs = await BlogsQueryRepository.getBlogs(searchNameTerm, pageNumber, pageSize, sortBy, sortDirection);
+    const blogs = await BlogsQueryRepository.getBlogs(
+        searchNameTerm,
+        transformInNumber(pageNumber, 1),
+        transformInNumber(pageSize, 10),
+        sortBy,
+        checkValueSortDirection(sortDirection),
+    );
     res.status(HTTP_STATUSES.OK_200).send(blogs);
 });
 
@@ -95,10 +102,8 @@ blogsRouter.post('/:blogId/posts',
 
     if (!post) {
         res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
-        return;
     } else {
         res.status(HTTP_STATUSES.CREATED_201).send(post);
-        return;
     }
 
 });
@@ -117,12 +122,19 @@ blogsRouter.get('/:blogId/posts',
         }
         
         const {
-            pageNumber = 1,
-            pageSize = 10,
+            pageNumber,
+            pageSize,
             sortBy = 'createdAt',
-            sortDirection = 'desc'
+            sortDirection
         } = req.query;
-        const posts = await PostsQueryRepository.getPostsForBlog(pageNumber, pageSize, sortBy, sortDirection, blogId)
+
+        const posts = await PostsQueryRepository.getPostsForBlog(
+            transformInNumber(pageNumber, 1),
+            transformInNumber(pageSize, 10),
+            sortBy,
+            checkValueSortDirection(sortDirection),
+            blogId
+        )
 
         if (!posts) {
             res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)

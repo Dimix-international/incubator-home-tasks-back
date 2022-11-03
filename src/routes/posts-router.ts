@@ -11,19 +11,25 @@ import {PostUpdateModel} from "../models/posts/PostsUpdateModel";
 import {postsService} from "../domains/posts-service";
 import {PostsQueryRepository} from "../repositories/posts-repository/posts-query-repository";
 import {PostsGetModel} from "../models/posts/PostsGetModel";
+import {checkValueSortDirection, transformInNumber} from "../helpers/helpers";
 
 
 export const postsRouter = Router({});
 
 postsRouter.get('/', async (req: RequestWithQuery<PostsGetModel>, res: Response<PostsViewModelType>) => {
     const {
-        pageNumber = 1,
-        pageSize = 10,
+        pageNumber,
+        pageSize,
         sortBy = 'createdAt',
-        sortDirection = 'desc'
+        sortDirection
     } = req.query;
 
-    const posts = await PostsQueryRepository.getPosts(pageNumber, pageSize, sortBy, sortDirection);
+    const posts = await PostsQueryRepository.getPosts(
+        transformInNumber(pageNumber, 1),
+        transformInNumber(pageSize, 10),
+        sortBy,
+        checkValueSortDirection(sortDirection)
+    );
     res.status(HTTP_STATUSES.OK_200).send(posts);
 });
 

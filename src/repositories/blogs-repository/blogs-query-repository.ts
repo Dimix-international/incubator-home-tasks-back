@@ -55,7 +55,7 @@ export const BlogsQueryRepository = {
         return {
             pagesCount: getPagesCount(totalCount || 0, pageSize),
             page: pageNumber,
-            pageSize,
+            pageSize: pageSize,
             totalCount: totalCount || 0,
             items: items as BlogType[]
         }
