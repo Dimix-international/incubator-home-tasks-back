@@ -5,4 +5,6 @@ export enum Roles {
     ADMIN = 'admin'
 }
 
+export const HASH_SALT_ROUNDS = 7;
+
 export const PASSWORD_ADMIN = 'qwerty';

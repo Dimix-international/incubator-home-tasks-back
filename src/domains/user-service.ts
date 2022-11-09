@@ -1,5 +1,7 @@
 import {UsersRepository} from "../repositories/users/users-repository";
-import {authService} from "./auth-service";
+import bcrypt from "bcrypt";
+import {v4 as uuidv4} from "uuid";
+import {HASH_SALT_ROUNDS} from "../constants/general/general";
 
 
 export const userService = {
@@ -11,7 +13,17 @@ export const userService = {
 
     async createUser (login: string, password: string, email: string) {
 
-        const newUser = await authService.createUser(login, password, email);
+        const hashPassword = await this._generateHash(password);
+
+        const newUser = {
+            id: uuidv4(),
+            login,
+            password: hashPassword,
+            email,
+            createdAt: new Date()
+        };
+
+        await UsersRepository.createUser(newUser);
 
         return {
             id: newUser.id,
@@ -19,5 +31,8 @@ export const userService = {
             email: newUser.email,
             createdAt: newUser.createdAt
         }
+    },
+    async _generateHash(password: string) {
+        return await bcrypt.hash(password, HASH_SALT_ROUNDS);
     }
 }
