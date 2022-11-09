@@ -40,7 +40,7 @@ usersRouter.get(
     res.status(HTTP_STATUSES.OK_200).send(users);
 });
 
-usersRouter.post('/:id',
+usersRouter.post('/',
     authMiddleware,
     UserValidatorSchema,
     inputValidatorMiddlewares,
