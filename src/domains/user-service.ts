@@ -22,7 +22,6 @@ export const userService = {
             email,
             createdAt: new Date()
         };
-
         await UsersRepository.createUser(newUser);
 
         return {
