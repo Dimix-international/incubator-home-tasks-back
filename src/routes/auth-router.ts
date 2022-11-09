@@ -9,7 +9,7 @@ import {HTTP_STATUSES} from "../data/data";
 
 export const authRouter = Router({});
 
-authRouter.post('/login',
+authRouter.post('auth/login',
     UserLoginValidatorSchema,
     inputValidatorMiddlewares,
     async (req: RequestWithBody<UserLoginModel>, res: Response) => {
