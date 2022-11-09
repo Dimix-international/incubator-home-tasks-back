@@ -1,27 +1,12 @@
 import {v4 as uuidv4} from "uuid";
 import bcrypt from 'bcrypt'
-import {UsersQueryRepository} from "../repositories/users/users-query-repository";
 import {UsersRepository} from "../repositories/users/users-repository";
 
 export const authService = {
-    async checkCredentials (login: string, password: string): Promise<UserType | null> {
+    async checkCredentials (clientPassword: string, userHahPassword: string): Promise<Boolean> {
 
-        const user = await UsersQueryRepository.getUserByLogin(login);
-
-        if (!user) {
-            return null
-        }
-
-        const hashPassword = await this._generateHash(password);
-
-        const isValidPassword = await bcrypt.compare(hashPassword, user.password);
-
-        if (!isValidPassword) {
-            return null;
-        }
-
-        return user;
-
+        const hashPassword = await this._generateHash(clientPassword);
+        return await bcrypt.compare(hashPassword, userHahPassword);
     },
     async createUser (login: string, password: string, email: string) {
 
