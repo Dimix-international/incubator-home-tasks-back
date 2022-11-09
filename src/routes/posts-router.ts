@@ -1,4 +1,4 @@
-import {Request, Response, Router} from "express";
+import {Response, Router} from "express";
 import {PostsViewModelType, PostViewModelType} from "../models/posts/PostsViewModelType";
 import {HTTP_STATUSES} from "../data/data";
 import {RequestWithBody, RequestWithParams, RequestWithParamsBody, RequestWithQuery} from "../types/types";

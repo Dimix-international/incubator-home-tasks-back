@@ -1,4 +1,4 @@
-import {MongoClient, ObjectId} from "mongodb";
+import {MongoClient} from "mongodb";
 import {settings} from "../settings";
 
 const client = new MongoClient(settings.MONGO_URI);
@@ -6,6 +6,7 @@ const db = client.db('social-info');
 
 export const BlogsCollection = db.collection<BlogType>('blogs');
 export const PostsCollection = db.collection<PostType>('posts');
+export const UsersCollection = db.collection<UserType>('users');
 
 export async function runDb() {
     try {
@@ -33,4 +34,12 @@ type PostType = {
     blogId: string,
     blogName: string,
     createdAt: Date,
+}
+
+type UserType = {
+    id: string;
+    login: string;
+    password: string;
+    email: string;
+    createdAt: Date
 }
