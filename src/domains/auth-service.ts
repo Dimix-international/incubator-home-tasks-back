@@ -3,10 +3,8 @@ import bcrypt from 'bcrypt'
 import {UsersRepository} from "../repositories/users/users-repository";
 
 export const authService = {
-    async checkCredentials (clientPassword: string, userHahPassword: string): Promise<Boolean> {
-
-        const hashPassword = await this._generateHash(clientPassword);
-        return await bcrypt.compare(hashPassword, userHahPassword);
+    async checkCredentials (clientPassword: string, userHashPassword: string): Promise<Boolean> {
+        return await bcrypt.compare(clientPassword, userHashPassword);
     },
     async createUser (login: string, password: string, email: string) {
 

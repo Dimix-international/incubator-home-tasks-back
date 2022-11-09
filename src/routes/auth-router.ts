@@ -18,7 +18,8 @@ authRouter.post('/login',
           res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401);
           return;
         }
-
+        console.log('user.password', user.password);
+        console.log('password', password);
         const isCorrectPassword = await authService.checkCredentials(password, user.password);
-        res.sendStatus(isCorrectPassword ? HTTP_STATUSES.NO_CONTENT_204 : HTTP_STATUSES.BAD_REQUEST_400);
+        res.sendStatus(isCorrectPassword ? HTTP_STATUSES.NO_CONTENT_204 : HTTP_STATUSES.UNAUTHORIZED_401);
 })
