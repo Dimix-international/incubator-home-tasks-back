@@ -32,7 +32,7 @@ export const CommentsQueryRepository = {
     },
 
     async getCommentById (id: string): Promise<CommentType | null> {
-        return await CommentsCollection.findOne({id}, { projection: { _id: 0 }});
+        return await CommentsCollection.findOne({id}, { projection: { _id: 0, postId: 0 }});
     }
 }
 
