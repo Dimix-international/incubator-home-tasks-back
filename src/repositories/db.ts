@@ -47,6 +47,7 @@ type UserType = {
 
 type CommentType = {
     id: string;
+    postId: string;
     content: string;
     userId: string;
     userLogin: string;

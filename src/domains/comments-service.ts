@@ -2,13 +2,14 @@ import {v4 as uuidv4} from "uuid";
 import {commentsRepository} from "../repositories/comments/comments-repository";
 
 export const commentsService = {
-    async createComment (content: string, userId: string, userLogin: string) {
+    async createComment (content: string, userId: string, userLogin: string, postId: string) {
 
         const newComment = {
             id: uuidv4(),
             content,
             userId,
             userLogin,
+            postId,
             createdAt: new Date()
         }
 

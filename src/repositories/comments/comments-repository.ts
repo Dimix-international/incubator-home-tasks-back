@@ -22,6 +22,7 @@ export const commentsRepository = {
 
 type CreateCommentType = {
     id: string;
+    postId: string;
     content: string;
     userId: string;
     userLogin: string;

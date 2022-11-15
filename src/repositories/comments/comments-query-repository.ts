@@ -4,6 +4,7 @@ import {getPagesCount, getSkip} from "../../helpers/helpers";
 export const CommentsQueryRepository = {
 
     async getComments (
+        postId: string,
         pageNumber: number,
         pageSize: number,
         sortBy: string,
@@ -12,7 +13,7 @@ export const CommentsQueryRepository = {
 
         const [items, totalCount] = await Promise.all([
             CommentsCollection
-                .find({}, {projection: {_id: 0}})
+                .find({postId}, {projection: {_id: 0}})
                 .sort({[sortBy]: sortDirection === 'asc' ? 1: -1})
                 .skip(getSkip(pageNumber, pageSize))
                 .limit(pageSize)

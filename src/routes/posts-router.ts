@@ -102,7 +102,7 @@ postsRouter.post('/:id/comments',
         }
 
         const {id: userId, login: userLogin} = req.user;
-        const newComment = await commentsService.createComment(content,userId ,userLogin);
+        const newComment = await commentsService.createComment(content,userId ,userLogin, postId);
         res.status(HTTP_STATUSES.CREATED_201).send(newComment)
 
     }
@@ -128,10 +128,11 @@ postsRouter.get('/:id/comments',
     }
 
     const comments = await CommentsQueryRepository.getComments(
+        postId,
         transformInNumber(pageNumber, 1),
         transformInNumber(pageSize, 10),
         sortBy,
-        sortDirection
+        sortDirection,
     );
 
     res.status(HTTP_STATUSES.OK_200).send(comments);
