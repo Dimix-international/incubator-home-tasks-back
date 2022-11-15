@@ -13,12 +13,12 @@ export const CommentsQueryRepository = {
 
         const [items, totalCount] = await Promise.all([
             CommentsCollection
-                .find({postId}, {projection: {_id: 0}})
+                .find({postId}, {projection: {_id: 0, postId: 0}})
                 .sort({[sortBy]: sortDirection === 'asc' ? 1: -1})
                 .skip(getSkip(pageNumber, pageSize))
                 .limit(pageSize)
                 .toArray(),
-            CommentsCollection.countDocuments()
+            CommentsCollection.countDocuments({postId})
         ]);
 
         return {
