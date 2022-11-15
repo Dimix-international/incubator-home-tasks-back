@@ -80,15 +80,15 @@ postsRouter.put('/:id',
     }
 )
 
-postsRouter.post('/:postId/comments',
+postsRouter.post('/:id/comments',
     authUserMiddleware,
     CreateCommentForPostSchema,
     inputValidatorMiddlewares,
     async (req: RequestWithParamsBody<PostsURIParamsModel, PostsCreateComment>, res: Response<CommentsViewModelType>) => {
-        const {id} = req.params;
-        const { content } = req.body;
+        const {id: postId} = req.params;
+        const {content} = req.body;
 
-        const post = PostsQueryRepository.getPostById(id);
+        const post = await PostsQueryRepository.getPostById(postId);
         if (!post) {
             return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
         }
