@@ -1,7 +1,13 @@
 import {Response, Router} from "express";
 import {PostsViewModelType, PostViewModelType} from "../models/posts/PostsViewModelType";
 import {HTTP_STATUSES} from "../data/data";
-import {RequestWithBody, RequestWithParams, RequestWithParamsBody, RequestWithQuery} from "../types/types";
+import {
+    RequestWithBody,
+    RequestWithParams,
+    RequestWithParamsBody,
+    RequestWithQuery,
+    RequestWithQueryParamsAndParams
+} from "../types/types";
 import {PostsURIParamsModel} from "../models/posts/PostsURIParamsModel";
 import {authMiddleware} from "../middlewares/auth-middleware";
 import {PostValidatorSchema} from "../validator-schemas/post-validator-schema";
@@ -16,7 +22,9 @@ import {CreateCommentForPostSchema} from "../validator-schemas/create-comment-fo
 import {PostsCreateComment} from "../models/posts/PostsCreateComment";
 import {authUserMiddleware} from "../middlewares/auth-user-middleware";
 import {commentsService} from "../domains/comments-service";
-import {CommentsViewModelType} from "../models/comments/CommentsViewModel";
+import {CommentsViewModel, CommentViewModelType} from "../models/comments/CommentsViewModel";
+import {CommentsGetModel} from "../models/comments/CommentsGetModel";
+import {CommentsQueryRepository} from "../repositories/comments/comments-query-repository";
 
 
 export const postsRouter = Router({});
@@ -84,7 +92,7 @@ postsRouter.post('/:id/comments',
     authUserMiddleware,
     CreateCommentForPostSchema,
     inputValidatorMiddlewares,
-    async (req: RequestWithParamsBody<PostsURIParamsModel, PostsCreateComment>, res: Response<CommentsViewModelType>) => {
+    async (req: RequestWithParamsBody<PostsURIParamsModel, PostsCreateComment>, res: Response<CommentViewModelType>) => {
         const {id: postId} = req.params;
         const {content} = req.body;
 
@@ -99,3 +107,33 @@ postsRouter.post('/:id/comments',
 
     }
 )
+
+postsRouter.get('/:id/comments',
+    async (
+        req: RequestWithQueryParamsAndParams<PostsURIParamsModel, CommentsGetModel>,
+        res: Response<CommentsViewModel>) => {
+
+    const {id: postId} = req.params;
+    const {
+        pageNumber,
+        pageSize,
+        sortBy = 'createdAt',
+        sortDirection = 'desc'
+    } = req.query;
+
+    const post = await PostsQueryRepository.getPostById(postId);
+
+    if (!post) {
+        return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
+    }
+
+    const comments = await CommentsQueryRepository.getComments(
+        transformInNumber(pageNumber, 1),
+        transformInNumber(pageSize, 10),
+        sortBy,
+        sortDirection
+    );
+
+    res.status(HTTP_STATUSES.OK_200).send(comments);
+
+})

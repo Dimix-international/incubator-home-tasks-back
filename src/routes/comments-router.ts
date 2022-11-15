@@ -1,5 +1,5 @@
 import {Response, Router} from "express";
-import {CommentsViewModelType} from "../models/comments/CommentsViewModel";
+import {CommentViewModelType} from "../models/comments/CommentsViewModel";
 import {RequestWithParams, RequestWithParamsBody} from "../types/types";
 import {CommentsURIParamsModel} from "../models/comments/CommentsURIParamsModel";
 import {CommentsQueryRepository} from "../repositories/comments/comments-query-repository";
@@ -16,7 +16,7 @@ export const commentsRouter = Router({});
 
 commentsRouter.get('/:id', async (
     req: RequestWithParams<CommentsURIParamsModel>,
-    res: Response<CommentsViewModelType>
+    res: Response<CommentViewModelType>
 ) => {
     const { id } = req.params;
 

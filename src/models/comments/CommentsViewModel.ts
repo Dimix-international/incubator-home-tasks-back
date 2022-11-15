@@ -1,6 +1,13 @@
 
+export type CommentsViewModel = {
+    pagesCount: number,
+    page: number,
+    pageSize: number,
+    totalCount: number,
+    items: CommentViewModelType[]
+}
 
-export type CommentsViewModelType = {
+export type CommentViewModelType = {
     id: string;
     content: string;
     userId: string;
