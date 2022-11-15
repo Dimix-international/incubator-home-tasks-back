@@ -3,13 +3,14 @@ import {RequestWithBody} from "../types/types";
 import {UserLoginModel} from "../models/auth/UserLoginModel";
 import {authService} from "../domains/auth-service";
 import {HTTP_STATUSES} from "../data/data";
-import {UsersQueryRepository} from "../repositories/users/users-query-repository";
+import {UsersQueryRepository, UserType} from "../repositories/users/users-query-repository";
+import {LoginViewModel} from "../models/auth/LoginViewModel";
 
 
 export const authRouter = Router({});
 
 authRouter.post('/login',
-    async (req: RequestWithBody<UserLoginModel>, res: Response) => {
+    async (req: RequestWithBody<UserLoginModel>, res: Response<LoginViewModel>) => {
         const {login, password} = req.body;
 
         const user = await UsersQueryRepository.getUserByLogin(login);
@@ -18,8 +19,13 @@ authRouter.post('/login',
           res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401);
           return;
         }
-        console.log('user.password', user.password);
-        console.log('password', password);
-        const isCorrectPassword = await authService.checkCredentials(password, user.password);
-        res.sendStatus(isCorrectPassword ? HTTP_STATUSES.NO_CONTENT_204 : HTTP_STATUSES.UNAUTHORIZED_401);
+        const { id } = user;
+        const userInfo = await authService.checkCredentials(password, user.password, {id});
+
+        if (userInfo) {
+            res.status(HTTP_STATUSES.OK_200).send(userInfo);
+        } else {
+            res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401);
+        }
+
 })

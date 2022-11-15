@@ -76,7 +76,7 @@ export const UsersQueryRepository = {
         return await UsersCollection.findOne({id}, { projection: { _id: 0, password: 0 }});
     },
     async getUserByLogin (login: string): Promise<UserType | null> {
-        return await UsersCollection.findOne({login}, { projection: { _id: 0 }});
+        return await UsersCollection.findOne({login}, { projection: { _id: 0}});
     }
 }
 

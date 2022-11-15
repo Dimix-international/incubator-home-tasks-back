@@ -36,7 +36,7 @@ export const postsService = {
     async updatePostById (id: string, data: PostUpdateModel): Promise<Boolean> {
         const {matchedCount} = await postsRepository.updatePostById(id, data);
         return !!matchedCount;
-    }
+    },
 }
 
 export type CreatePostType = {

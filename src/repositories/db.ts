@@ -7,6 +7,7 @@ const db = client.db('social-info');
 export const BlogsCollection = db.collection<BlogType>('blogs');
 export const PostsCollection = db.collection<PostType>('posts');
 export const UsersCollection = db.collection<UserType>('users');
+export const CommentsCollection = db.collection<CommentType>('comments');
 
 export async function runDb() {
     try {
@@ -41,5 +42,13 @@ type UserType = {
     login: string;
     password: string;
     email: string;
+    createdAt: Date
+}
+
+type CommentType = {
+    id: string;
+    content: string;
+    userId: string;
+    userLogin: string;
     createdAt: Date
 }

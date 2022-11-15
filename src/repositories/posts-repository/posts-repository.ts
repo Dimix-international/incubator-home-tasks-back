@@ -1,4 +1,4 @@
-import {PostsCollection} from "../db";
+import {CommentsCollection, PostsCollection} from "../db";
 import {CreatePostType, UpdatePostType} from "../../domains/posts-service";
 
 
@@ -16,5 +16,6 @@ export const postsRepository = {
                 $set: {...data}
             }
         )
-    }
+    },
 }
+

@@ -12,6 +12,11 @@ import {postsService} from "../domains/posts-service";
 import {PostsQueryRepository} from "../repositories/posts-repository/posts-query-repository";
 import {PostsGetModel} from "../models/posts/PostsGetModel";
 import {transformInNumber} from "../helpers/helpers";
+import {CreateCommentForPostSchema} from "../validator-schemas/create-comment-for-post-schema";
+import {PostsCreateComment} from "../models/posts/PostsCreateComment";
+import {authUserMiddleware} from "../middlewares/auth-user-middleware";
+import {commentsService} from "../domains/comments-service";
+import {CommentsViewModelType} from "../models/comments/CommentsViewModel";
 
 
 export const postsRouter = Router({});
@@ -72,5 +77,25 @@ postsRouter.put('/:id',
         const { id } = req.params;
         const isUpdatedPost = await postsService.updatePostById(id, req.body);
         res.sendStatus(isUpdatedPost ? HTTP_STATUSES.NO_CONTENT_204 : HTTP_STATUSES.NOT_FOUND_404);
+    }
+)
+
+postsRouter.post('/:postId/comments',
+    authUserMiddleware,
+    CreateCommentForPostSchema,
+    inputValidatorMiddlewares,
+    async (req: RequestWithParamsBody<PostsURIParamsModel, PostsCreateComment>, res: Response<CommentsViewModelType>) => {
+        const {id} = req.params;
+        const { content } = req.body;
+
+        const post = PostsQueryRepository.getPostById(id);
+        if (!post) {
+            return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
+        }
+
+        const {id: userId, login: userLogin} = req.user;
+        const newComment = await commentsService.createComment(content,userId ,userLogin);
+        res.status(HTTP_STATUSES.CREATED_201).send(newComment)
+
     }
 )
