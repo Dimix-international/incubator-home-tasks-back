@@ -1,4 +1,4 @@
-import {BlogsCollection, PostsCollection, UsersCollection} from "./db";
+import {BlogsCollection, CommentsCollection, PostsCollection, UsersCollection} from "./db";
 
 
 export const testingDataRepository = {
@@ -7,6 +7,7 @@ export const testingDataRepository = {
             BlogsCollection.deleteMany({}),
             PostsCollection.deleteMany({}),
             UsersCollection.deleteMany({}),
+            CommentsCollection.deleteMany({}),
         ]);
     }
 }
