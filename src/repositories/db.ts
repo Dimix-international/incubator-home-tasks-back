@@ -1,8 +1,9 @@
 import {MongoClient} from "mongodb";
 import {settings} from "../settings";
 
+//settings.MONGO_URI
 const client = new MongoClient(settings.MONGO_URI);
-const db = client.db('social-info');
+const db = client.db('social-info'); //имя db
 
 export const BlogsCollection = db.collection<BlogType>('blogs');
 export const PostsCollection = db.collection<PostType>('posts');

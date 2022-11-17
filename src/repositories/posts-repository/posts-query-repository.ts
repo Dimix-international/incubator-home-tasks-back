@@ -1,7 +1,7 @@
 import {PostsCollection} from "../db";
 import {getPagesCount, getSkip} from "../../helpers/helpers";
 
-export const PostsQueryRepository = {
+class PostsQueryRepository {
     async getPosts (pageNumber: number,
                     pageSize: number,
                     sortBy: string,
@@ -25,10 +25,10 @@ export const PostsQueryRepository = {
             totalCount: totalCount || 0,
             items: result as PostType[]
         }
-    },
+    }
     async getPostById (id: string): Promise<PostType | null> {
         return await PostsCollection.findOne({id}, { projection: { _id: 0 }});
-    },
+    }
     async getPostsForBlog(pageNumber: number,
                           pageSize: number,
                           sortBy: string,
@@ -88,6 +88,9 @@ export const PostsQueryRepository = {
         }
     }
 }
+
+
+export const postsQueryRepository = new PostsQueryRepository();
 
 
 export type PostsType = {

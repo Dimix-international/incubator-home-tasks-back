@@ -1,28 +1,21 @@
-import {UsersRepository} from "../repositories/users/users-repository";
+import {usersRepository} from "../../repositories/users/users-repository";
 import bcrypt from "bcrypt";
-import {v4 as uuidv4} from "uuid";
-import {HASH_SALT_ROUNDS} from "../constants/general/general";
+import {HASH_SALT_ROUNDS} from "../../constants/general/general";
+import {User} from "./classes";
 
-
-export const userService = {
-
+class UserService {
     async deleteUserById(id: string): Promise<Boolean> {
-        const {deletedCount} = await UsersRepository.deleteUser(id);
+        const {deletedCount} = await usersRepository.deleteUser(id);
         return !!deletedCount;
-    },
+    }
 
     async createUser (login: string, password: string, email: string) {
 
         const hashPassword = await this._generateHash(password);
 
-        const newUser = {
-            id: uuidv4(),
-            login,
-            password: hashPassword,
-            email,
-            createdAt: new Date()
-        };
-        await UsersRepository.createUser(newUser);
+        const newUser = new User(login, hashPassword, email);
+
+        await usersRepository.createUser(newUser);
 
         return {
             id: newUser.id,
@@ -30,8 +23,12 @@ export const userService = {
             email: newUser.email,
             createdAt: newUser.createdAt
         }
-    },
+    }
+
     async _generateHash(password: string) {
         return await bcrypt.hash(password, HASH_SALT_ROUNDS);
     }
 }
+
+
+export const userService = new UserService();

@@ -1,7 +1,7 @@
 import {UsersCollection} from "../db";
 import {getPagesCount, getSkip} from "../../helpers/helpers";
 
-export const UsersQueryRepository = {
+class UsersQueryRepository {
     async getUsers(pageNumber: number,
                    pageSize: number,
                    sortBy: string,
@@ -71,14 +71,16 @@ export const UsersQueryRepository = {
             totalCount: totalCount || 0,
             items: items as GetUserType[]
         }
-    },
+    }
     async getUserById (id: string): Promise<UserType | null> {
         return await UsersCollection.findOne({id}, { projection: { _id: 0, password: 0 }});
-    },
+    }
     async getUserByLogin (login: string): Promise<UserType | null> {
         return await UsersCollection.findOne({login}, { projection: { _id: 0}});
     }
 }
+
+export const usersQueryRepository = new UsersQueryRepository();
 
 
 export type UsersType = {

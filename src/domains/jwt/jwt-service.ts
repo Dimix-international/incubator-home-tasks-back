@@ -1,8 +1,7 @@
 import jwt from 'jsonwebtoken';
-import {settings} from "../settings";
+import {settings} from "../../settings";
 
-
-export const jwtService = {
+class JwtService {
     async createJWT(payload: UserPayloadType): Promise<CreateJWTType> {
         const accessToken =  jwt.sign(
             {userid: payload.id},
@@ -15,8 +14,7 @@ export const jwtService = {
             { expiresIn: '30d'}
         );
         return {accessToken, refreshToken}
-    },
-    
+    }
     async getUserIdByToken(accessToken: string) {
         try {
             const result:any = await jwt.verify(accessToken, settings.JWT_SECRET_ACCESS);
@@ -26,6 +24,8 @@ export const jwtService = {
         }
     }
 }
+
+export const jwtService = new JwtService();
 
 type CreateJWTType = {
     accessToken: string,

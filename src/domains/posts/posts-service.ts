@@ -1,21 +1,16 @@
-import {PostCreateModel} from "../models/posts/PostsCreateModel";
-import {PostUpdateModel} from "../models/posts/PostsUpdateModel";
-import {postsRepository} from "../repositories/posts-repository/posts-repository";
-import {BlogsQueryRepository} from "../repositories/blogs-repository/blogs-query-repository";
-import {v4 as uuidv4} from 'uuid';
+import {PostCreateModel} from "../../models/posts/PostsCreateModel";
+import {postsRepository} from "../../repositories/posts-repository/posts-repository";
+import {blogsQueryRepository} from "../../repositories/blogs-repository/blogs-query-repository";
+import {Post} from "./classes";
 
-export const postsService = {
+class PostsService {
     async createPost (data: PostCreateModel): Promise<CreatePostType | null> {
         const { blogId } = data;
-        const blog = await BlogsQueryRepository.getBlogById(blogId);
+        const blog = await blogsQueryRepository.getBlogById(blogId);
         if (blog) {
             const { name } = blog;
-            const newPost = {
-                id: uuidv4(),
-                ...data,
-                blogName: name,
-                createdAt: new Date()
-            };
+            const {content, blogId, shortDescription, title} = data;
+            const newPost = new Post(title, shortDescription, content, blogId, name)
             await postsRepository.createPost(newPost);
             return {
                 id: newPost.id,
@@ -28,16 +23,18 @@ export const postsService = {
             };
         }
         return null;
-    },
-     async deletePostById (id: string): Promise<Boolean> {
-         const {deletedCount} = await postsRepository.deletePostById(id);
-         return !!deletedCount;
-    },
-    async updatePostById (id: string, data: PostUpdateModel): Promise<Boolean> {
+    }
+    async deletePostById (id: string): Promise<Boolean> {
+        const {deletedCount} = await postsRepository.deletePostById(id);
+        return !!deletedCount;
+    }
+    async updatePostById (id: string, data: UpdatePostType): Promise<Boolean> {
         const {matchedCount} = await postsRepository.updatePostById(id, data);
         return !!matchedCount;
-    },
+    }
 }
+
+export const postsService = new PostsService();
 
 export type CreatePostType = {
     id: string,

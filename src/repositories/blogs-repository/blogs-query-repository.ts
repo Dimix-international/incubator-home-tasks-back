@@ -1,7 +1,7 @@
 import {BlogsCollection} from "../db";
 import {getPagesCount, getSkip} from "../../helpers/helpers";
 
-export const BlogsQueryRepository = {
+class BlogsQueryRepository {
     async getBlogs(searchNameTerm: string | null,
                    pageNumber: number,
                    pageSize: number,
@@ -14,13 +14,13 @@ export const BlogsQueryRepository = {
                     items: [
                         {
                             $match: {
-                               name: searchNameTerm ? {$regex: new RegExp(searchNameTerm, 'i')} : {$ne: null}
+                                name: searchNameTerm ? {$regex: new RegExp(searchNameTerm, 'i')} : {$ne: null}
                             },
                         },
                         {
-                           $sort: {
-                               [sortBy]: sortDirection === "asc" ? 1 : -1
-                           }
+                            $sort: {
+                                [sortBy]: sortDirection === "asc" ? 1 : -1
+                            }
                         },
                         {
                             $skip: getSkip(pageNumber, pageSize)
@@ -60,11 +60,14 @@ export const BlogsQueryRepository = {
             items: items as BlogType[]
         }
 
-    },
+    }
+
     async getBlogById (id: string): Promise<BlogType | null>  {
         return await BlogsCollection.findOne({id}, { projection: { _id: 0 }});
-    },
+    }
 }
+
+export const blogsQueryRepository = new BlogsQueryRepository();
 
 
 export type BlogsType = {

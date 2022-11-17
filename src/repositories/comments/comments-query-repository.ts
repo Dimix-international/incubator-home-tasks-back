@@ -1,15 +1,15 @@
 import {CommentsCollection} from "../db";
 import {getPagesCount, getSkip} from "../../helpers/helpers";
 
-export const CommentsQueryRepository = {
 
+class CommentsQueryRepository {
     async getComments (
         postId: string,
         pageNumber: number,
         pageSize: number,
         sortBy: string,
         sortDirection: 'asc' | 'desc'
-        ): Promise<CommentsType> {
+    ): Promise<CommentsType> {
 
         const [items, totalCount] = await Promise.all([
             CommentsCollection
@@ -29,12 +29,14 @@ export const CommentsQueryRepository = {
             items
         }
 
-    },
+    }
 
     async getCommentById (id: string): Promise<CommentType | null> {
         return await CommentsCollection.findOne({id}, { projection: { _id: 0, postId: 0 }});
     }
 }
+
+export const commentsQueryRepository = new CommentsQueryRepository();
 
 type CommentsType = {
     pagesCount: number,

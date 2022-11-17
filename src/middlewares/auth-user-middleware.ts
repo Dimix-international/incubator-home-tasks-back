@@ -1,10 +1,7 @@
 import {NextFunction, Request, Response} from "express";
 import {HTTP_STATUSES} from "../data/data";
-import {decodedBase64} from "../helpers/helpers";
-import {PASSWORD_ADMIN, Roles} from "../constants/general/general";
-import {jwtService} from "../domains/jwt-service";
-import {userService} from "../domains/user-service";
-import {UsersQueryRepository} from "../repositories/users/users-query-repository";
+import {jwtService} from "../domains/jwt/jwt-service";
+import {usersQueryRepository} from "../repositories/users/users-query-repository";
 
 
 export const authUserMiddleware = async (req: Request, res: Response, next: NextFunction) => {
@@ -31,7 +28,7 @@ export const authUserMiddleware = async (req: Request, res: Response, next: Next
             return;
         }
 
-        req.user = await UsersQueryRepository.getUserById(userId);
+        req.user = await usersQueryRepository.getUserById(userId);
 
         next();
 
