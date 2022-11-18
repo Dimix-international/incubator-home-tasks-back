@@ -10,7 +10,7 @@ export const BlogsValidatorSchema = [
         .withMessage('This field is required!')
         .isLength({max: 15})
         .withMessage('Max 15 symbols'),
-    body('youtubeUrl')
+    body('websiteUrl')
         .isString()
         .withMessage('Incorrect data format!')
         .trim()
@@ -20,4 +20,12 @@ export const BlogsValidatorSchema = [
         .withMessage('Max 100 symbols')
         .matches(urlFormat)
         .withMessage('Incorrect url address!'),
+    body('description')
+        .isString()
+        .withMessage('Incorrect data format!')
+        .trim()
+        .exists({checkFalsy: true})
+        .withMessage('This field is required!')
+        .isLength({max: 500})
+        .withMessage('Max 500 symbols')
 ]

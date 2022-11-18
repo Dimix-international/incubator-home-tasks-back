@@ -17,9 +17,9 @@ class AuthRouterController {
     }
 
     async login (req: RequestWithBody<UserLoginModel>, res: Response<LoginViewModel>) {
-        const {login, password} = req.body;
+        const {loginOrEmail, password} = req.body;
 
-        const user = await this.usersQueryRepository.getUserByLogin(login);
+        const user = await this.usersQueryRepository.getUserByEmailLogin(loginOrEmail);
 
         if (!user) {
             res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401);

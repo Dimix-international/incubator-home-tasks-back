@@ -23,8 +23,9 @@ export async function runDb() {
 
 type BlogType = {
     id: string,
-    name: string,
-    youtubeUrl: string,
+    name: string;
+    description: string;
+    websiteUrl: string;
     createdAt: Date,
 }
 

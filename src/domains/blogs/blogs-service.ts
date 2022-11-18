@@ -11,18 +11,18 @@ export class BlogsService {
         this.blogsRepository = new BlogsRepository();
     }
 
-
     async createBlog (data: BlogCreateModel): Promise<BlogViewModel | null> {
-        const { name, youtubeUrl } = data;
+        const { name, websiteUrl, description  } = data;
 
-        const insertedBlog = new Blog(name, youtubeUrl);
+        const insertedBlog = new Blog(name, websiteUrl, description);
 
         await this.blogsRepository.createBlog(insertedBlog);
         return {
             name: insertedBlog.name,
             createdAt: insertedBlog.createdAt,
             id: insertedBlog.id,
-            youtubeUrl: insertedBlog.youtubeUrl
+            websiteUrl: insertedBlog.websiteUrl,
+            description: insertedBlog.description
         }
     }
     async deleteBlogById (id: string): Promise<Boolean> {

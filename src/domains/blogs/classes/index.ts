@@ -5,7 +5,8 @@ export class Blog {
     createdAt: Date;
 
     constructor(public name: string,
-                public youtubeUrl: string
+                public websiteUrl: string,
+                public description: string
     ) {
         this.id = uuidv4();
         this.createdAt = new Date();

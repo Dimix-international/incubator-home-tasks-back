@@ -1,8 +1,9 @@
 
 export type BlogUpdateModel = {
     /**
-     * name, youtubeUrl of blog
+     * title, description, websiteUrl  of blog
      */
-    name: string,
-    youtubeUrl: string
+    name: string;
+    description: string;
+    websiteUrl: string;
 }

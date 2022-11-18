@@ -19,6 +19,7 @@ export type PostsForBlogViewModel = {
 export type BlogViewModel = {
     id: string,
     name: string,
-    youtubeUrl: string,
+    description: string;
+    websiteUrl: string;
     createdAt: Date,
 }

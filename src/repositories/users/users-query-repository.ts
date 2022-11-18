@@ -75,8 +75,13 @@ export class UsersQueryRepository {
     async getUserById (id: string): Promise<UserType | null> {
         return await UsersCollection.findOne({id}, { projection: { _id: 0, password: 0 }});
     }
-    async getUserByLogin (login: string): Promise<UserType | null> {
-        return await UsersCollection.findOne({login}, { projection: { _id: 0}});
+    async getUserByEmailLogin (emailOrLogin: string): Promise<UserType | null> {
+        return await UsersCollection.findOne({
+            $or: [
+                {login: emailOrLogin},
+                {email: emailOrLogin}
+            ]
+        }, { projection: { _id: 0}});
     }
 }
 

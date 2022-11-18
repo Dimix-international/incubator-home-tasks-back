@@ -1,8 +1,9 @@
 
 export type BlogCreateModel = {
     /**
-     * title, youtubeUrl of blog
+     * title, description, websiteUrl  of blog
      */
     name: string;
-    youtubeUrl: string
+    description: string;
+    websiteUrl: string;
 }
