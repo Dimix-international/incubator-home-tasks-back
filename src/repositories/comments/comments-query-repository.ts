@@ -2,7 +2,7 @@ import {CommentsCollection} from "../db";
 import {getPagesCount, getSkip} from "../../helpers/helpers";
 
 
-class CommentsQueryRepository {
+export class CommentsQueryRepository {
     async getComments (
         postId: string,
         pageNumber: number,
@@ -35,8 +35,6 @@ class CommentsQueryRepository {
         return await CommentsCollection.findOne({id}, { projection: { _id: 0, postId: 0 }});
     }
 }
-
-export const commentsQueryRepository = new CommentsQueryRepository();
 
 type CommentsType = {
     pagesCount: number,

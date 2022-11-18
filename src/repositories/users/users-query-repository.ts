@@ -1,7 +1,7 @@
 import {UsersCollection} from "../db";
 import {getPagesCount, getSkip} from "../../helpers/helpers";
 
-class UsersQueryRepository {
+export class UsersQueryRepository {
     async getUsers(pageNumber: number,
                    pageSize: number,
                    sortBy: string,
@@ -79,9 +79,6 @@ class UsersQueryRepository {
         return await UsersCollection.findOne({login}, { projection: { _id: 0}});
     }
 }
-
-export const usersQueryRepository = new UsersQueryRepository();
-
 
 export type UsersType = {
     pagesCount: number,

@@ -1,17 +1,25 @@
 import {PostCreateModel} from "../../models/posts/PostsCreateModel";
-import {postsRepository} from "../../repositories/posts-repository/posts-repository";
-import {blogsQueryRepository} from "../../repositories/blogs-repository/blogs-query-repository";
+import {PostsRepository} from "../../repositories/posts-repository/posts-repository";
+import {BlogsQueryRepository} from "../../repositories/blogs-repository/blogs-query-repository";
 import {Post} from "./classes";
 
-class PostsService {
+export class PostsService {
+    private blogsQueryRepository: BlogsQueryRepository;
+    private postsRepository: PostsRepository;
+
+    constructor() {
+        this.blogsQueryRepository = new BlogsQueryRepository();
+        this.postsRepository = new PostsRepository();
+    }
+
     async createPost (data: PostCreateModel): Promise<CreatePostType | null> {
         const { blogId } = data;
-        const blog = await blogsQueryRepository.getBlogById(blogId);
+        const blog = await this.blogsQueryRepository.getBlogById(blogId);
         if (blog) {
             const { name } = blog;
             const {content, blogId, shortDescription, title} = data;
             const newPost = new Post(title, shortDescription, content, blogId, name)
-            await postsRepository.createPost(newPost);
+            await this.postsRepository.createPost(newPost);
             return {
                 id: newPost.id,
                 createdAt: newPost.createdAt,
@@ -25,16 +33,14 @@ class PostsService {
         return null;
     }
     async deletePostById (id: string): Promise<Boolean> {
-        const {deletedCount} = await postsRepository.deletePostById(id);
+        const {deletedCount} = await this.postsRepository.deletePostById(id);
         return !!deletedCount;
     }
     async updatePostById (id: string, data: UpdatePostType): Promise<Boolean> {
-        const {matchedCount} = await postsRepository.updatePostById(id, data);
+        const {matchedCount} = await this.postsRepository.updatePostById(id, data);
         return !!matchedCount;
     }
 }
-
-export const postsService = new PostsService();
 
 export type CreatePostType = {
     id: string,

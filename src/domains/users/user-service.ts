@@ -1,11 +1,18 @@
-import {usersRepository} from "../../repositories/users/users-repository";
+import {UsersRepository} from "../../repositories/users/users-repository";
 import bcrypt from "bcrypt";
 import {HASH_SALT_ROUNDS} from "../../constants/general/general";
 import {User} from "./classes";
 
-class UserService {
+export class UserService {
+    private usersRepository: UsersRepository;
+
+    constructor() {
+        this.usersRepository = new UsersRepository();
+    }
+
+
     async deleteUserById(id: string): Promise<Boolean> {
-        const {deletedCount} = await usersRepository.deleteUser(id);
+        const {deletedCount} = await this.usersRepository.deleteUser(id);
         return !!deletedCount;
     }
 
@@ -15,7 +22,7 @@ class UserService {
 
         const newUser = new User(login, hashPassword, email);
 
-        await usersRepository.createUser(newUser);
+        await this.usersRepository.createUser(newUser);
 
         return {
             id: newUser.id,
@@ -29,6 +36,3 @@ class UserService {
         return await bcrypt.hash(password, HASH_SALT_ROUNDS);
     }
 }
-
-
-export const userService = new UserService();

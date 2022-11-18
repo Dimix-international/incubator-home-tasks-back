@@ -1,7 +1,7 @@
 import {CommentsCollection, PostsCollection} from "../db";
 import {CreatePostType, UpdatePostType} from "../../domains/posts/posts-service";
 
-class PostsRepository {
+export class PostsRepository {
     async createPost (data: CreatePostType) {
         return await PostsCollection.insertOne(data);
     }
@@ -17,6 +17,4 @@ class PostsRepository {
         )
     }
 }
-
-export const postsRepository = new PostsRepository();
 

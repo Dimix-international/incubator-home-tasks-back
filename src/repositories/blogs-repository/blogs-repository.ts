@@ -2,7 +2,7 @@ import {BlogUpdateModel} from "../../models/blogs/BlogUpdateModel";
 import {BlogsCollection} from "../db";
 import {BlogViewModel} from "../../models/blogs/BlogViewModel";
 
-class BlogsRepository {
+export class BlogsRepository {
     async createBlog (blog:BlogViewModel) {
         return await BlogsCollection.insertOne(blog);
     }
@@ -18,6 +18,3 @@ class BlogsRepository {
         );
     }
 }
-
-
-export const blogsRepository = new BlogsRepository();

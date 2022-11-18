@@ -1,7 +1,7 @@
 import {UsersCollection} from "../db";
 
 
-class UsersRepository {
+export class UsersRepository {
     async deleteUser(id: string){
         return await UsersCollection.deleteOne({id})
     }
@@ -9,8 +9,6 @@ class UsersRepository {
         return await UsersCollection.insertOne(data)
     }
 }
-
-export const usersRepository = new UsersRepository();
 
 type CreateUserType = {
     id: string;

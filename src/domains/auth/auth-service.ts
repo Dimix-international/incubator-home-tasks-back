@@ -1,19 +1,24 @@
 import bcrypt from 'bcrypt'
-import {jwtService} from "../jwt/jwt-service";
+import {JwtService} from "../jwt/jwt-service";
 
-class AuthService {
+export class AuthService {
+    jwtService: JwtService;
+
+    constructor() {
+        this.jwtService = new JwtService();
+    }
+
+
     async checkCredentials (clientPassword: string, userHashPassword: string, payload: UserPayloadType ):
         Promise<CheckCredentialsType | null> {
         const isRightPassword =  await bcrypt.compare(clientPassword, userHashPassword);
         if (isRightPassword) {
-            const {accessToken} = await jwtService.createJWT(payload);
+            const {accessToken} = await this.jwtService.createJWT(payload);
             return {accessToken}
         }
         return null
     }
 }
-
-export const authService = new AuthService();
 
 type CheckCredentialsType = {
     accessToken: string

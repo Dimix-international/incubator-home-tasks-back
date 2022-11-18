@@ -1,10 +1,13 @@
 import {NextFunction, Request, Response} from "express";
 import {HTTP_STATUSES} from "../data/data";
-import {jwtService} from "../domains/jwt/jwt-service";
-import {usersQueryRepository} from "../repositories/users/users-query-repository";
+import {JwtService} from "../domains/jwt/jwt-service";
+import {UsersQueryRepository} from "../repositories/users/users-query-repository";
 
 
 export const authUserMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+
+    const usersQueryRepository = new UsersQueryRepository();
+    const jwtService = new JwtService();
 
     try {
 

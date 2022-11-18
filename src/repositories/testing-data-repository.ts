@@ -1,7 +1,7 @@
 import {BlogsCollection, CommentsCollection, PostsCollection, UsersCollection} from "./db";
 
 
-export const testingDataRepository = {
+export class TestingDataRepository {
     async deleteAllData () {
         await Promise.all([
             BlogsCollection.deleteMany({}),

@@ -1,7 +1,7 @@
 import {BlogsCollection} from "../db";
 import {getPagesCount, getSkip} from "../../helpers/helpers";
 
-class BlogsQueryRepository {
+export class BlogsQueryRepository {
     async getBlogs(searchNameTerm: string | null,
                    pageNumber: number,
                    pageSize: number,
@@ -66,8 +66,6 @@ class BlogsQueryRepository {
         return await BlogsCollection.findOne({id}, { projection: { _id: 0 }});
     }
 }
-
-export const blogsQueryRepository = new BlogsQueryRepository();
 
 
 export type BlogsType = {

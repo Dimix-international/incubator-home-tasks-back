@@ -1,7 +1,7 @@
 import {PostsCollection} from "../db";
 import {getPagesCount, getSkip} from "../../helpers/helpers";
 
-class PostsQueryRepository {
+export class PostsQueryRepository {
     async getPosts (pageNumber: number,
                     pageSize: number,
                     sortBy: string,
@@ -88,9 +88,6 @@ class PostsQueryRepository {
         }
     }
 }
-
-
-export const postsQueryRepository = new PostsQueryRepository();
 
 
 export type PostsType = {

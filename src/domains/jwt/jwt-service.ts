@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import {settings} from "../../settings";
 
-class JwtService {
+export class JwtService {
     async createJWT(payload: UserPayloadType): Promise<CreateJWTType> {
         const accessToken =  jwt.sign(
             {userid: payload.id},
@@ -25,7 +25,6 @@ class JwtService {
     }
 }
 
-export const jwtService = new JwtService();
 
 type CreateJWTType = {
     accessToken: string,

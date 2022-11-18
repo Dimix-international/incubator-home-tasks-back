@@ -1,13 +1,19 @@
-import {commentsRepository} from "../../repositories/comments/comments-repository";
+import {CommentsRepository} from "../../repositories/comments/comments-repository";
 import {Comment} from './classes';
 
-class CommentsService {
-    async createComment (content: string, userId: string, userLogin: string, postId: string) {
+export class CommentsService {
 
+    private commentsRepository: CommentsRepository;
+
+    constructor() {
+        this.commentsRepository = new CommentsRepository();
+    }
+
+    async createComment (content: string, userId: string, userLogin: string, postId: string) {
 
         const newComment = new Comment(content, userId, userLogin, postId);
 
-        await commentsRepository.createCommentForPost(newComment);
+        await this.commentsRepository.createCommentForPost(newComment);
 
         return {
             id: newComment.id,
@@ -18,13 +24,11 @@ class CommentsService {
         }
     }
     async deleteComment (commentId: string): Promise<Boolean>  {
-        const {deletedCount} =  await commentsRepository.deleteComment(commentId);
+        const {deletedCount} =  await this.commentsRepository.deleteComment(commentId);
         return !!deletedCount;
     }
     async updateComment (commentId: string, content: string): Promise<Boolean> {
-        const {matchedCount} =  await commentsRepository.updateComment(commentId, content);
+        const {matchedCount} =  await this.commentsRepository.updateComment(commentId, content);
         return !!matchedCount;
     }
 }
-
-export const commentsService = new CommentsService();

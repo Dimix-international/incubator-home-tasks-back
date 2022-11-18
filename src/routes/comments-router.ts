@@ -2,24 +2,35 @@ import {Response, Router} from "express";
 import {CommentViewModelType} from "../models/comments/CommentsViewModel";
 import {RequestWithParams, RequestWithParamsBody} from "../types/types";
 import {CommentsURIParamsModel} from "../models/comments/CommentsURIParamsModel";
-import {commentsQueryRepository} from "../repositories/comments/comments-query-repository";
+import {CommentsQueryRepository} from "../repositories/comments/comments-query-repository";
 import {HTTP_STATUSES} from "../data/data";
 import {authUserMiddleware} from "../middlewares/auth-user-middleware";
-import {usersQueryRepository} from "../repositories/users/users-query-repository";
-import {commentsService} from "../domains/comments/comments-service";
+import {UsersQueryRepository} from "../repositories/users/users-query-repository";
+import {CommentsService} from "../domains/comments/comments-service";
 import {CreateCommentForPostSchema} from "../validator-schemas/create-comment-for-post-schema";
 import {inputValidatorMiddlewares} from "../middlewares/input-validator-middlewares";
 import {CommentsUpdateModel} from "../models/comments/CommentsUpdateModel";
 
 
 class CommentsController {
+
+    private usersQueryRepository: UsersQueryRepository;
+    private commentsQueryRepository: CommentsQueryRepository;
+    private commentsService: CommentsService
+
+    constructor() {
+        this.usersQueryRepository = new UsersQueryRepository();
+        this.commentsQueryRepository = new CommentsQueryRepository();
+        this.commentsService = new CommentsService();
+    }
+
     async getComments (
         req: RequestWithParams<CommentsURIParamsModel>,
         res: Response<CommentViewModelType>
     ) {
     const { id } = req.params;
 
-    const comment = await commentsQueryRepository.getCommentById(id);
+    const comment = await this.commentsQueryRepository.getCommentById(id);
 
     if (!comment) {
         return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
@@ -32,7 +43,7 @@ class CommentsController {
     ) {
     const { id: commentId } = req.params;
 
-    const comment = await commentsQueryRepository.getCommentById(commentId);
+    const comment = await this.commentsQueryRepository.getCommentById(commentId);
 
     if (!comment) {
         return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
@@ -40,7 +51,7 @@ class CommentsController {
 
     const { id: userId } = req.user;
 
-    const user = await usersQueryRepository.getUserById(userId);
+    const user = await this.usersQueryRepository.getUserById(userId);
 
     if (!user) {
         return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
@@ -50,7 +61,7 @@ class CommentsController {
         return res.sendStatus(HTTP_STATUSES.FORBIDDEN_403);
     }
 
-    const isDeletedComment = await commentsService.deleteComment(commentId);
+    const isDeletedComment = await this.commentsService.deleteComment(commentId);
 
     res.sendStatus(isDeletedComment ? HTTP_STATUSES.NO_CONTENT_204 : HTTP_STATUSES.NOT_FOUND_404);
     }
@@ -61,7 +72,7 @@ class CommentsController {
         const { id: commentId } = req.params;
         const { content } = req.body;
 
-        const comment = await commentsQueryRepository.getCommentById(commentId);
+        const comment = await this.commentsQueryRepository.getCommentById(commentId);
 
         if (!comment) {
             return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
@@ -69,7 +80,7 @@ class CommentsController {
 
         const { id: userId } = req.user;
 
-        const user = await usersQueryRepository.getUserById(userId);
+        const user = await this.usersQueryRepository.getUserById(userId);
 
         if (!user) {
             return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
@@ -79,7 +90,7 @@ class CommentsController {
             return res.sendStatus(HTTP_STATUSES.FORBIDDEN_403);
         }
 
-        const isUpdatedComment = await commentsService.updateComment(commentId, content);
+        const isUpdatedComment = await this.commentsService.updateComment(commentId, content);
 
         return res.sendStatus(isUpdatedComment ? HTTP_STATUSES.NO_CONTENT_204: HTTP_STATUSES.NOT_FOUND_404);
     }
@@ -90,13 +101,13 @@ const commentsController = new CommentsController();
 export const commentsRouter = Router({});
 
 
-commentsRouter.get('/:id', commentsController.getComments);
+commentsRouter.get('/:id', commentsController.getComments.bind(commentsController));
 
-commentsRouter.delete('/:id', authUserMiddleware, commentsController.deleteComment);
+commentsRouter.delete('/:id', authUserMiddleware, commentsController.deleteComment.bind(commentsController));
 
 commentsRouter.put('/:id',
     authUserMiddleware,
     CreateCommentForPostSchema,
     inputValidatorMiddlewares,
-    commentsController.updateComment
+    commentsController.updateComment.bind(commentsController)
 );
