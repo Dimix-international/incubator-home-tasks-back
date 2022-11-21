@@ -3,11 +3,7 @@ import {Comment} from './classes';
 
 export class CommentsService {
 
-    private commentsRepository: CommentsRepository;
-
-    constructor() {
-        this.commentsRepository = new CommentsRepository();
-    }
+    constructor(protected commentsRepository: CommentsRepository) {}
 
     async createComment (content: string, userId: string, userLogin: string, postId: string) {
 

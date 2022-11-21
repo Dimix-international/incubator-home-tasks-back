@@ -4,13 +4,10 @@ import {BlogsQueryRepository} from "../../repositories/blogs-repository/blogs-qu
 import {Post} from "./classes";
 
 export class PostsService {
-    private blogsQueryRepository: BlogsQueryRepository;
-    private postsRepository: PostsRepository;
 
-    constructor() {
-        this.blogsQueryRepository = new BlogsQueryRepository();
-        this.postsRepository = new PostsRepository();
-    }
+
+    constructor(protected blogsQueryRepository: BlogsQueryRepository,
+                protected postsRepository: PostsRepository) {}
 
     async createPost (data: PostCreateModel): Promise<CreatePostType | null> {
         const { blogId } = data;

@@ -2,11 +2,8 @@ import bcrypt from 'bcrypt'
 import {JwtService} from "../jwt/jwt-service";
 
 export class AuthService {
-    jwtService: JwtService;
 
-    constructor() {
-        this.jwtService = new JwtService();
-    }
+    constructor(protected jwtService: JwtService) {}
 
 
     async checkCredentials (clientPassword: string, userHashPassword: string, payload: UserPayloadType ):

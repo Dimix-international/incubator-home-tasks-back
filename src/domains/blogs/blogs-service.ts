@@ -5,11 +5,8 @@ import {BlogViewModel} from "../../models/blogs/BlogViewModel";
 import {Blog} from "./classes";
 
 export class BlogsService {
-    private blogsRepository: BlogsRepository;
 
-    constructor() {
-        this.blogsRepository = new BlogsRepository();
-    }
+    constructor(protected blogsRepository: BlogsRepository) {}
 
     async createBlog (data: BlogCreateModel): Promise<BlogViewModel | null> {
         const { name, websiteUrl, description  } = data;

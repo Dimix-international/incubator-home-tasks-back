@@ -4,11 +4,8 @@ import {HASH_SALT_ROUNDS} from "../../constants/general/general";
 import {User} from "./classes";
 
 export class UserService {
-    private usersRepository: UsersRepository;
 
-    constructor() {
-        this.usersRepository = new UsersRepository();
-    }
+    constructor(protected usersRepository: UsersRepository) {}
 
 
     async deleteUserById(id: string): Promise<Boolean> {
