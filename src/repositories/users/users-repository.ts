@@ -1,12 +1,23 @@
 import {UsersCollection} from "../db";
 
-
 export class UsersRepository {
     async deleteUser(id: string){
         return await UsersCollection.deleteOne({id})
     }
     async createUser(data: CreateUserType) {
         return await UsersCollection.insertOne(data)
+    }
+    async activateUser(userId: string) {
+        return await UsersCollection.updateOne(
+            {id: userId},
+            {$set: { isActivated: true }
+        })
+    }
+    async updateCountSendEmails(userId: string) {
+        return await UsersCollection.updateOne(
+            {id: userId},
+            {$inc: {countSendEmailsActivated: 1}}
+        )
     }
 }
 
@@ -16,4 +27,7 @@ type CreateUserType = {
     email: string;
     password: string;
     createdAt: Date;
+    activationCode: string;
+    isActivated: boolean
+    countSendEmailsActivated: number;
 }

@@ -40,7 +40,7 @@ export class UserController {
     async createUser(req: RequestWithBody<UserCreateModel>, res: Response<UserViewModelType>) {
         const {login, email, password} = req.body;
 
-        const newUser = await this.userService.createUser(login, password, email) as UserViewModelType;
+        const newUser = await this.userService.createUser(login, password, email);
         res.status(HTTP_STATUSES.CREATED_201).send(newUser);
     }
 

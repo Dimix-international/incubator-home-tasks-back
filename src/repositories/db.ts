@@ -44,7 +44,10 @@ type UserType = {
     login: string;
     password: string;
     email: string;
-    createdAt: Date
+    createdAt: Date;
+    activationCode: string
+    isActivated: boolean
+    countSendEmailsActivated: number;
 }
 
 type CommentType = {

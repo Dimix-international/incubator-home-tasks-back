@@ -7,7 +7,6 @@ export class UserService {
 
     constructor(protected usersRepository: UsersRepository) {}
 
-
     async deleteUserById(id: string): Promise<Boolean> {
         const {deletedCount} = await this.usersRepository.deleteUser(id);
         return !!deletedCount;
@@ -25,8 +24,20 @@ export class UserService {
             id: newUser.id,
             login: newUser.login,
             email: newUser.email,
-            createdAt: newUser.createdAt
+            createdAt: newUser.createdAt,
+            activationCode: newUser.activationCode,
+            countSendEmailsActivated: newUser.countSendEmailsActivated
         }
+    }
+
+    async activateUser (userId: string): Promise<Boolean> {
+        const {matchedCount} = await this.usersRepository.activateUser(userId);
+        return !!matchedCount;
+    }
+
+    async updateCountSendEmails (userId: string): Promise<Boolean> {
+        const {matchedCount} = await this.usersRepository.updateCountSendEmails(userId);
+        return !!matchedCount;
     }
 
     async _generateHash(password: string) {

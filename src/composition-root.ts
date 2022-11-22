@@ -19,6 +19,8 @@ import {UserController} from "./routes/controllers/user-controller";
 import {UserService} from "./domains/users/user-service";
 import {TestingDataRepository} from "./repositories/testing-data-repository";
 import {TestingDataController} from "./routes/controllers/testing_data_controller";
+import {EmailsService} from "./domains/emails/emails-service";
+import {EmailAdapter} from "./adapters/email-adapter";
 
 
 const blogsQueryRepository = new BlogsQueryRepository();
@@ -43,8 +45,11 @@ const userService = new UserService(usersRepository);
 const blogsService = new BlogsService(blogsRepository);
 const postsService = new PostsService(blogsQueryRepository, postsRepository);
 
+const emailAdapter = new EmailAdapter();
+const emailsService = new EmailsService(emailAdapter);
+
 export const blogsController = new BlogsController(postsQueryRepository, postsService, blogsQueryRepository, blogsService);
-export const authRouterController = new AuthRouterController(usersQueryRepository, authService);
+export const authRouterController = new AuthRouterController(usersQueryRepository, authService, userService, emailsService);
 export const postsController = new PostsController(postsQueryRepository, commentsQueryRepository, commentsService, postsService);
 export const commentsController = new CommentsController(usersQueryRepository, commentsQueryRepository, commentsService);
 export const usersController = new UserController(usersQueryRepository, userService);
