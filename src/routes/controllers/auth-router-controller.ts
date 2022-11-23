@@ -92,6 +92,7 @@ export class AuthRouterController {
         }
 
         try {
+            await this.userService.createNewActivatedCode(user.id);
             await this.emailsService.sendEmailConfirmationRegistration(email, user.activationCode);
             await this.userService.updateCountSendEmails(user.id);
             return res.sendStatus(HTTP_STATUSES.NO_CONTENT_204);

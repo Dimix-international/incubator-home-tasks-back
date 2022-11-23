@@ -2,6 +2,7 @@ import {UsersRepository} from "../../repositories/users/users-repository";
 import bcrypt from "bcrypt";
 import {HASH_SALT_ROUNDS} from "../../constants/general/general";
 import {User} from "./classes";
+import {v4 as uuidv4} from 'uuid';
 
 export class UserService {
 
@@ -38,6 +39,12 @@ export class UserService {
     async updateCountSendEmails (userId: string): Promise<Boolean> {
         const {matchedCount} = await this.usersRepository.updateCountSendEmails(userId);
         return !!matchedCount;
+    }
+
+    async createNewActivatedCode (userId: string): Promise<String | null> {
+        const code = uuidv4();
+        const {matchedCount} = await this.usersRepository.createNewActivatedCode(userId, code);
+        return !!matchedCount ? code : null;
     }
 
     async _generateHash(password: string) {

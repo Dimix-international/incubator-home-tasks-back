@@ -1,7 +1,11 @@
 import {body} from "express-validator";
+import {RequestWithBody} from "../types/types";
+import {UserLoginModel} from "../models/auth/UserLoginModel";
+import {UsersQueryRepository} from "../repositories/users/users-query-repository";
 
+const usersQueryRepository = new UsersQueryRepository();
 
-export const UserValidatorSchema = [
+export const RegistrationValidatorSchema = [
     body('login')
         .isString()
         .withMessage('Incorrect data format!')
@@ -30,4 +34,15 @@ export const UserValidatorSchema = [
         .withMessage('This field is required!')
         .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
         .withMessage('Incorrect email format!')
+        .custom( async (_, {req}) => {
+            const {body: { loginOrEmail }} = req as RequestWithBody<UserLoginModel>;
+            const user = await usersQueryRepository.getUserByEmailLogin(loginOrEmail);
+
+            if (user) {
+                throw new Error('User is exist!');
+            }
+
+            return true;
+
+        })
 ]
