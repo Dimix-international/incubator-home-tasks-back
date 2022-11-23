@@ -22,7 +22,7 @@ export class UsersRepository {
     async createNewActivatedCode(userId: string, code: string) {
         return await UsersCollection.updateOne(
             {id: userId},
-            {activationCode: code}
+            {$set: {activationCode: code}}
         )
     }
 }
