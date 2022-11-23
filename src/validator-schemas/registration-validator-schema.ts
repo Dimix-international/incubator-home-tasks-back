@@ -16,7 +16,15 @@ export const RegistrationValidatorSchema = [
         .isLength({max: 10})
         .withMessage('Max 10 symbols')
         .isLength({min: 3})
-        .withMessage('Min 3 symbols'),
+        .withMessage('Min 3 symbols')
+        .custom( async (_, {req}) => {
+            const {body: { login }} = req as RequestWithBody<RegistrationViewModel>;
+            const user = await usersQueryRepository.getUserByEmailLogin(login);
+            if (user) {
+                throw new Error('Login is exist!');
+            }
+            return true;
+        }),
     body('password')
         .isString()
         .withMessage('Incorrect data format!')
@@ -38,12 +46,9 @@ export const RegistrationValidatorSchema = [
         .custom( async (_, {req}) => {
             const {body: { email }} = req as RequestWithBody<RegistrationViewModel>;
             const user = await usersQueryRepository.getUserByEmailLogin(email);
-
             if (user) {
-                throw new Error('User is exist!');
+                throw new Error('Email is exist!');
             }
-
             return true;
-
-        })
+        }),
 ]
