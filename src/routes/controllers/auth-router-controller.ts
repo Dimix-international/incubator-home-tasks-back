@@ -91,9 +91,14 @@ export class AuthRouterController {
             return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
         }
 
+        const code = await this.userService.createNewActivatedCode(user.id);
+
+        if (!code) {
+            return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
+        }
+
         try {
-            await this.userService.createNewActivatedCode(user.id);
-            await this.emailsService.sendEmailConfirmationRegistration(email, user.activationCode);
+            await this.emailsService.sendEmailConfirmationRegistration(email, code);
             await this.userService.updateCountSendEmails(user.id);
             return res.sendStatus(HTTP_STATUSES.NO_CONTENT_204);
         } catch {

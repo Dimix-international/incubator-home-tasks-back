@@ -2,6 +2,7 @@ import {body} from "express-validator";
 import {RequestWithBody} from "../types/types";
 import {UserLoginModel} from "../models/auth/UserLoginModel";
 import {UsersQueryRepository} from "../repositories/users/users-query-repository";
+import {RegistrationViewModel} from "../models/auth/RegistrationViewModel";
 
 const usersQueryRepository = new UsersQueryRepository();
 
@@ -35,8 +36,8 @@ export const RegistrationValidatorSchema = [
         .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
         .withMessage('Incorrect email format!')
         .custom( async (_, {req}) => {
-            const {body: { loginOrEmail }} = req as RequestWithBody<UserLoginModel>;
-            const user = await usersQueryRepository.getUserByEmailLogin(loginOrEmail);
+            const {body: { email }} = req as RequestWithBody<RegistrationViewModel>;
+            const user = await usersQueryRepository.getUserByEmailLogin(email);
 
             if (user) {
                 throw new Error('User is exist!');

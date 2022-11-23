@@ -41,7 +41,7 @@ export class UserService {
         return !!matchedCount;
     }
 
-    async createNewActivatedCode (userId: string): Promise<String | null> {
+    async createNewActivatedCode (userId: string): Promise<string | null> {
         const code = uuidv4();
         const {matchedCount} = await this.usersRepository.createNewActivatedCode(userId, code);
         return !!matchedCount ? code : null;
