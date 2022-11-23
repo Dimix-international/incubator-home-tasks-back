@@ -64,8 +64,8 @@ export class AuthRouterController {
         }
     }
 
-    async activation (req: RequestWithQuery<ActivationViewModel>, res: Response) {
-       const {code} = req.query;
+    async activation (req: RequestWithBody<ActivationViewModel>, res: Response) {
+       const {code} = req.body;
 
        const user = await this.usersQueryRepository.getUserByActivatedCode(code);
 

@@ -41,8 +41,8 @@ export const RegistrationValidatorSchema = [
         .trim()
         .exists({checkFalsy: true})
         .withMessage('This field is required!')
-        .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
-        .withMessage('Incorrect email format!')
+       // .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
+       // .withMessage('Incorrect email format!')
         .custom( async (_, {req}) => {
             const {body: { email }} = req as RequestWithBody<RegistrationViewModel>;
             const user = await usersQueryRepository.getUserByEmailLogin(email);
