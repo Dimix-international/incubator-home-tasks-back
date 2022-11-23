@@ -78,7 +78,7 @@ export class AuthRouterController {
        if (!isActivatedUser) {
            return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
        }
-       return res.sendStatus(HTTP_STATUSES.OK_200);
+       return res.sendStatus(HTTP_STATUSES.NO_CONTENT_204);
 
     }
 
