@@ -1,9 +1,10 @@
 import {EmailAdapter} from "../../adapters/email-adapter";
+import {inject, injectable} from "inversify";
 
-
+@injectable()
 export class EmailsService {
 
-    constructor(protected emailAdapter: EmailAdapter) {}
+    constructor(@inject(EmailAdapter) protected emailAdapter: EmailAdapter) {}
 
     async sendEmailConfirmationRegistration (email: string, activationCode: string) {
         const message = `

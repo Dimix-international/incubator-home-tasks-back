@@ -1,6 +1,7 @@
 import {BlogsCollection, CommentsCollection, PostsCollection, UsersCollection} from "./db";
+import {injectable} from "inversify";
 
-
+@injectable()
 export class TestingDataRepository {
     async deleteAllData () {
         await Promise.all([

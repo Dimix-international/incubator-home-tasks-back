@@ -2,12 +2,12 @@ import {NextFunction, Request, Response} from "express";
 import {HTTP_STATUSES} from "../data/data";
 import {JwtService} from "../domains/jwt/jwt-service";
 import {UsersQueryRepository} from "../repositories/users/users-query-repository";
+import {container} from "../composition-root";
 
+const usersQueryRepository = container.resolve(UsersQueryRepository);
+const jwtService = container.resolve(JwtService);
 
 export const authUserMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-
-    const usersQueryRepository = new UsersQueryRepository();
-    const jwtService = new JwtService();
 
     try {
 

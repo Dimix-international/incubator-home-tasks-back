@@ -1,5 +1,8 @@
 import {Router} from "express";
-import {testingDataController} from "../composition-root";
+import {container} from "../composition-root";
+import {TestingDataController} from "./controllers/testing_data_controller";
+
+const testingDataController = container.resolve(TestingDataController);
 
 
 export const testingDataRouter = Router({});

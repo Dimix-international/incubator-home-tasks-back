@@ -3,10 +3,12 @@ import {BlogUpdateModel} from "../../models/blogs/BlogUpdateModel";
 import {BlogsRepository} from "../../repositories/blogs-repository/blogs-repository";
 import {BlogViewModel} from "../../models/blogs/BlogViewModel";
 import {Blog} from "./classes";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class BlogsService {
 
-    constructor(protected blogsRepository: BlogsRepository) {}
+    constructor(@inject(BlogsRepository) protected blogsRepository: BlogsRepository) {}
 
     async createBlog (data: BlogCreateModel): Promise<BlogViewModel | null> {
         const { name, websiteUrl, description  } = data;

@@ -1,6 +1,7 @@
 import {CommentsCollection} from "../db";
+import {injectable} from "inversify";
 
-
+@injectable()
 export class CommentsRepository {
     async createCommentForPost (data: CreateCommentType) {
         return await CommentsCollection.insertOne(data);

@@ -3,7 +3,11 @@ import {BlogsValidatorSchema} from "../validator-schemas/blogs-validator-schema"
 import {inputValidatorMiddlewares} from "../middlewares/input-validator-middlewares";
 import {authMiddleware} from "../middlewares/auth-middleware";
 import {CreatePostForBlogValidatorSchema} from "../validator-schemas/create-post-for-blog-validator-schema";
-import {blogsController} from "../composition-root";
+import {container} from "../composition-root";
+import {BlogsController} from "./controllers/blogs-controller";
+
+
+const blogsController = container.resolve(BlogsController);
 
 export const blogsRouter = Router({});
 

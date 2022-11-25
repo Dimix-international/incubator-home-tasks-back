@@ -1,10 +1,12 @@
 import {Router} from "express";
-import {authRouterController} from "../composition-root";
 import {inputValidatorMiddlewares} from "../middlewares/input-validator-middlewares";
 import {ActivateAuthValidatorSchema} from "../validator-schemas/activate-auth-validator-schema";
 import {ResendingActivationValidatorSchema} from "../validator-schemas/resending-activation-validator-schema";
 import {RegistrationValidatorSchema} from "../validator-schemas/registration-validator-schema";
+import {container} from "../composition-root";
+import {AuthRouterController} from "./controllers/auth-router-controller";
 
+const authRouterController = container.resolve(AuthRouterController);
 
 export const authRouter = Router({});
 

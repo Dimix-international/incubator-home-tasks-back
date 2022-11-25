@@ -3,10 +3,12 @@ import bcrypt from "bcrypt";
 import {HASH_SALT_ROUNDS} from "../../constants/general/general";
 import {User} from "./classes";
 import {v4 as uuidv4} from 'uuid';
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class UserService {
 
-    constructor(protected usersRepository: UsersRepository) {}
+    constructor(@inject(UsersRepository) protected usersRepository: UsersRepository) {}
 
     async deleteUserById(id: string): Promise<Boolean> {
         const {deletedCount} = await this.usersRepository.deleteUser(id);

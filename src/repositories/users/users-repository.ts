@@ -1,5 +1,7 @@
 import {UsersCollection} from "../db";
+import {injectable} from "inversify";
 
+@injectable()
 export class UsersRepository {
     async deleteUser(id: string){
         return await UsersCollection.deleteOne({id})

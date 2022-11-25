@@ -1,6 +1,6 @@
 import {UsersQueryRepository} from "../../repositories/users/users-query-repository";
 import {AuthService} from "../../domains/auth/auth-service";
-import {RequestWithBody, RequestWithQuery} from "../../types/types";
+import {RequestWithBody} from "../../types/types";
 import {UserLoginModel} from "../../models/auth/UserLoginModel";
 import {Response} from "express";
 import {LoginViewModel} from "../../models/auth/LoginViewModel";
@@ -10,13 +10,15 @@ import {UserService} from "../../domains/users/user-service";
 import {EmailsService} from "../../domains/emails/emails-service";
 import {ActivationViewModel} from "../../models/auth/ActivationViewModel";
 import {ResendingViewModel} from "../../models/auth/ResendingViewModel";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class AuthRouterController {
 
-    constructor(protected usersQueryRepository: UsersQueryRepository,
-                protected authService: AuthService,
-                protected userService: UserService,
-                protected emailsService: EmailsService
+    constructor(@inject(UsersQueryRepository) protected usersQueryRepository: UsersQueryRepository,
+                @inject(AuthService) protected authService: AuthService,
+                @inject(UserService) protected userService: UserService,
+                @inject(EmailsService) protected emailsService: EmailsService
     ) {}
 
     async login(req: RequestWithBody<UserLoginModel>, res: Response<LoginViewModel>) {

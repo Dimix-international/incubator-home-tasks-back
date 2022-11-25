@@ -1,5 +1,4 @@
 import {body} from "express-validator";
-import {urlFormat} from "../constants/general/general";
 
 export const CreatePostForBlogValidatorSchema = [
     body('title')

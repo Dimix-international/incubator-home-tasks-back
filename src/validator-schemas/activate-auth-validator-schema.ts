@@ -2,8 +2,9 @@ import {UsersQueryRepository} from "../repositories/users/users-query-repository
 import {body} from "express-validator";
 import {RequestWithBody} from "../types/types";
 import {ActivationViewModel} from "../models/auth/ActivationViewModel";
+import {container} from "../composition-root";
 
-const usersQueryRepository = new UsersQueryRepository();
+const usersQueryRepository = container.resolve(UsersQueryRepository);
 
 export const ActivateAuthValidatorSchema = [
     body('code')

@@ -8,11 +8,13 @@ import {transformInNumber} from "../../helpers/helpers";
 import {HTTP_STATUSES} from "../../data/data";
 import {UserCreateModel} from "../../models/users/UserCreateModel";
 import {UsersURIParamsModel} from "../../models/users/UsersURIParamsModel";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class UserController {
 
-    constructor(protected usersQueryRepository: UsersQueryRepository,
-                protected userService: UserService) {
+    constructor(@inject(UsersQueryRepository) protected usersQueryRepository: UsersQueryRepository,
+                @inject(UserService) protected userService: UserService) {
     }
 
     async getUsers(req: RequestWithQuery<UsersGetModel>, res: Response<UsersViewModelType>) {

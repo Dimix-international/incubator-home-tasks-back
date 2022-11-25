@@ -21,13 +21,15 @@ import {BlogCreatePostBlogURIParamsModel} from "../../models/blogs/BlogCreatePos
 import {BlogCreatePostForBlogModel} from "../../models/blogs/BlogCreatePostForBlogModel";
 import {BlogWithCreatedPostViewModel} from "../../models/blogs/BlogWithCreatedPostViewModel";
 import {PostsGetModel} from "../../models/posts/PostsGetModel";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class BlogsController {
 
-    constructor(protected postsQueryRepository: PostsQueryRepository,
-                protected postsService: PostsService,
-                protected blogsQueryRepository: BlogsQueryRepository,
-                protected blogsService: BlogsService,
+    constructor(@inject(PostsQueryRepository) protected postsQueryRepository: PostsQueryRepository,
+                @inject(PostsService) protected postsService: PostsService,
+                @inject(BlogsQueryRepository) protected blogsQueryRepository: BlogsQueryRepository,
+                @inject(BlogsService) protected blogsService: BlogsService,
     ) {
     }
 

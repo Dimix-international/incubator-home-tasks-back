@@ -2,8 +2,9 @@ import {UsersQueryRepository} from "../repositories/users/users-query-repository
 import {body} from "express-validator";
 import {RequestWithBody} from "../types/types";
 import {ResendingViewModel} from "../models/auth/ResendingViewModel";
+import {container} from "../composition-root";
 
-const usersQueryRepository = new UsersQueryRepository();
+const usersQueryRepository = container.resolve(UsersQueryRepository);
 
 export const ResendingActivationValidatorSchema = [
 

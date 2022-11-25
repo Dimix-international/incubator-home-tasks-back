@@ -1,9 +1,11 @@
 import bcrypt from 'bcrypt'
 import {JwtService} from "../jwt/jwt-service";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class AuthService {
 
-    constructor(protected jwtService: JwtService) {}
+    constructor(@inject(JwtService) protected jwtService: JwtService) {}
 
 
     async checkCredentials (clientPassword: string, userHashPassword: string, payload: UserPayloadType ):

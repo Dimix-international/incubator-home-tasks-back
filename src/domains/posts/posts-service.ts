@@ -2,12 +2,13 @@ import {PostCreateModel} from "../../models/posts/PostsCreateModel";
 import {PostsRepository} from "../../repositories/posts-repository/posts-repository";
 import {BlogsQueryRepository} from "../../repositories/blogs-repository/blogs-query-repository";
 import {Post} from "./classes";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class PostsService {
 
-
-    constructor(protected blogsQueryRepository: BlogsQueryRepository,
-                protected postsRepository: PostsRepository) {}
+    constructor(@inject(BlogsQueryRepository) protected blogsQueryRepository: BlogsQueryRepository,
+                @inject(PostsRepository) protected postsRepository: PostsRepository) {}
 
     async createPost (data: PostCreateModel): Promise<CreatePostType | null> {
         const { blogId } = data;

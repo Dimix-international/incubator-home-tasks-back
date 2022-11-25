@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import {BlogsQueryRepository} from "./repositories/blogs-repository/blogs-query-repository";
 import {BlogsRepository} from "./repositories/blogs-repository/blogs-repository";
 import {CommentsQueryRepository} from "./repositories/comments/comments-query-repository";
@@ -21,36 +22,37 @@ import {TestingDataRepository} from "./repositories/testing-data-repository";
 import {TestingDataController} from "./routes/controllers/testing_data_controller";
 import {EmailsService} from "./domains/emails/emails-service";
 import {EmailAdapter} from "./adapters/email-adapter";
+import {Container} from "inversify";
 
+export const container = new Container();
 
-const blogsQueryRepository = new BlogsQueryRepository();
-const blogsRepository = new BlogsRepository();
+container.bind<TestingDataController>(TestingDataController).to(TestingDataController);
+container.bind<TestingDataRepository>(TestingDataRepository).to(TestingDataRepository);
 
-const commentsQueryRepository = new CommentsQueryRepository();
-const commentsRepository = new CommentsRepository();
-const testingDataRepository = new TestingDataRepository();
+container.bind<BlogsController>(BlogsController).to(BlogsController);
+container.bind<BlogsService>(BlogsService).to(BlogsService);
+container.bind<BlogsQueryRepository>(BlogsQueryRepository).to(BlogsQueryRepository);
+container.bind<BlogsRepository>(BlogsRepository).to(BlogsRepository);
 
-const postsQueryRepository = new PostsQueryRepository();
-const postsRepository = new PostsRepository();
+container.bind<PostsController>(PostsController).to(PostsController);
+container.bind<PostsService>(PostsService).to(PostsService);
+container.bind<PostsRepository>(PostsRepository).to(PostsRepository);
+container.bind<PostsQueryRepository>(PostsQueryRepository).to(PostsQueryRepository);
 
-const usersQueryRepository = new UsersQueryRepository();
-const usersRepository = new UsersRepository();
+container.bind<UserController>(UserController).to(UserController);
+container.bind<UsersQueryRepository>(UsersQueryRepository).to(UsersQueryRepository);
+container.bind<UserService>(UserService).to(UserService);
+container.bind<UsersRepository>(UsersRepository).to(UsersRepository);
 
-const jwtService = new JwtService();
+container.bind<CommentsController>(CommentsController).to(CommentsController);
+container.bind<CommentsService>(CommentsService).to(CommentsService);
+container.bind<CommentsQueryRepository>(CommentsQueryRepository).to(CommentsQueryRepository);
+container.bind<CommentsRepository>(CommentsRepository).to(CommentsRepository);
 
-const commentsService = new CommentsService(commentsRepository);
+container.bind<AuthRouterController>(AuthRouterController).to(AuthRouterController);
+container.bind<AuthService>(AuthService).to(AuthService);
 
-const authService = new AuthService(jwtService);
-const userService = new UserService(usersRepository);
-const blogsService = new BlogsService(blogsRepository);
-const postsService = new PostsService(blogsQueryRepository, postsRepository);
+container.bind<JwtService>(JwtService).to(JwtService);
 
-const emailAdapter = new EmailAdapter();
-const emailsService = new EmailsService(emailAdapter);
-
-export const blogsController = new BlogsController(postsQueryRepository, postsService, blogsQueryRepository, blogsService);
-export const authRouterController = new AuthRouterController(usersQueryRepository, authService, userService, emailsService);
-export const postsController = new PostsController(postsQueryRepository, commentsQueryRepository, commentsService, postsService);
-export const commentsController = new CommentsController(usersQueryRepository, commentsQueryRepository, commentsService);
-export const usersController = new UserController(usersQueryRepository, userService);
-export const testingDataController = new TestingDataController(testingDataRepository);
+container.bind<EmailsService>(EmailsService).to(EmailsService);
+container.bind<EmailAdapter>(EmailAdapter).to(EmailAdapter);

@@ -3,8 +3,9 @@ import {RequestWithBody} from "../types/types";
 import {UserLoginModel} from "../models/auth/UserLoginModel";
 import {UsersQueryRepository} from "../repositories/users/users-query-repository";
 import {RegistrationViewModel} from "../models/auth/RegistrationViewModel";
+import {container} from "../composition-root";
 
-const usersQueryRepository = new UsersQueryRepository();
+const usersQueryRepository = container.resolve(UsersQueryRepository);
 
 export const RegistrationValidatorSchema = [
     body('login')

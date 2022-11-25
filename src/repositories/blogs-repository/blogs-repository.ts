@@ -1,7 +1,9 @@
 import {BlogUpdateModel} from "../../models/blogs/BlogUpdateModel";
 import {BlogsCollection} from "../db";
 import {BlogViewModel} from "../../models/blogs/BlogViewModel";
+import {injectable} from "inversify";
 
+@injectable()
 export class BlogsRepository {
     async createBlog (blog:BlogViewModel) {
         return await BlogsCollection.insertOne(blog);

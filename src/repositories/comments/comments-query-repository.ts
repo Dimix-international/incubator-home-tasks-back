@@ -1,7 +1,8 @@
 import {CommentsCollection} from "../db";
 import {getPagesCount, getSkip} from "../../helpers/helpers";
+import {injectable} from "inversify";
 
-
+@injectable()
 export class CommentsQueryRepository {
     async getComments (
         postId: string,

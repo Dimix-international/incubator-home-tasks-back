@@ -7,12 +7,14 @@ import {Response} from "express";
 import {CommentViewModelType} from "../../models/comments/CommentsViewModel";
 import {HTTP_STATUSES} from "../../data/data";
 import {CommentsUpdateModel} from "../../models/comments/CommentsUpdateModel";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class CommentsController {
 
-    constructor(protected usersQueryRepository: UsersQueryRepository,
-                protected commentsQueryRepository: CommentsQueryRepository,
-                protected commentsService: CommentsService) {
+    constructor(@inject(UsersQueryRepository) protected usersQueryRepository: UsersQueryRepository,
+                @inject(CommentsQueryRepository) protected commentsQueryRepository: CommentsQueryRepository,
+                @inject(CommentsService) protected commentsService: CommentsService) {
     }
 
     async getComments(

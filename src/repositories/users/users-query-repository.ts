@@ -1,6 +1,8 @@
 import {UsersCollection} from "../db";
 import {getPagesCount, getSkip} from "../../helpers/helpers";
+import {injectable} from "inversify";
 
+@injectable()
 export class UsersQueryRepository {
     async getUsers(pageNumber: number,
                    pageSize: number,

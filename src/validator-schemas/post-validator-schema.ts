@@ -1,8 +1,8 @@
 import {body} from "express-validator";
 import {BlogsQueryRepository} from "../repositories/blogs-repository/blogs-query-repository";
+import {container} from "../composition-root";
 
-const blogsQueryRepository = new BlogsQueryRepository();
-
+const blogsQueryRepository = container.resolve(BlogsQueryRepository);
 
 export const PostValidatorSchema = [
     body('title')

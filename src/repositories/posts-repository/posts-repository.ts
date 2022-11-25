@@ -1,6 +1,8 @@
 import {CommentsCollection, PostsCollection} from "../db";
 import {CreatePostType, UpdatePostType} from "../../domains/posts/posts-service";
+import {injectable} from "inversify";
 
+@injectable()
 export class PostsRepository {
     async createPost (data: CreatePostType) {
         return await PostsCollection.insertOne(data);

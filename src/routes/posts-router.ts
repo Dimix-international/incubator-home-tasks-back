@@ -4,8 +4,10 @@ import {PostValidatorSchema} from "../validator-schemas/post-validator-schema";
 import {inputValidatorMiddlewares} from "../middlewares/input-validator-middlewares";
 import {CreateCommentForPostSchema} from "../validator-schemas/create-comment-for-post-schema";
 import {authUserMiddleware} from "../middlewares/auth-user-middleware";
-import {postsController} from "../composition-root";
+import {container} from "../composition-root";
+import {PostsController} from "./controllers/posts-controller";
 
+const postsController = container.resolve(PostsController);
 
 export const postsRouter = Router({});
 

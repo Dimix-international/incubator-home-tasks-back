@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken';
 import {settings} from "../../settings";
+import {injectable} from "inversify";
 
+@injectable()
 export class JwtService {
     async createJWT(payload: UserPayloadType): Promise<CreateJWTType> {
         const accessToken =  jwt.sign(

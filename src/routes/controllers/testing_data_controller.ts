@@ -1,10 +1,12 @@
 import {TestingDataRepository} from "../../repositories/testing-data-repository";
 import {Request, Response} from "express";
 import {HTTP_STATUSES} from "../../data/data";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class TestingDataController {
 
-    constructor(protected testingDataRepository: TestingDataRepository) {
+    constructor(@inject(TestingDataRepository) protected testingDataRepository: TestingDataRepository) {
     }
 
     async deleteAllData(req: Request, res: Response) {

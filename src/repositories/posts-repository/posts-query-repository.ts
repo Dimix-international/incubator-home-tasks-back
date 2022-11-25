@@ -1,6 +1,8 @@
 import {PostsCollection} from "../db";
 import {getPagesCount, getSkip} from "../../helpers/helpers";
+import {injectable} from "inversify";
 
+@injectable()
 export class PostsQueryRepository {
     async getPosts (pageNumber: number,
                     pageSize: number,

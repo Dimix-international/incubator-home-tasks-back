@@ -2,8 +2,10 @@ import {Router} from "express";
 import {authUserMiddleware} from "../middlewares/auth-user-middleware";
 import {CreateCommentForPostSchema} from "../validator-schemas/create-comment-for-post-schema";
 import {inputValidatorMiddlewares} from "../middlewares/input-validator-middlewares";
-import {commentsController} from "../composition-root";
+import {container} from "../composition-root";
+import {CommentsController} from "./controllers/comments-controller";
 
+const commentsController = container.resolve(CommentsController);
 
 export const commentsRouter = Router({});
 
